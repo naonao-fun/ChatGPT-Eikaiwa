@@ -1,0 +1,295 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Electrolize', 'Noto Sans JP', sans-serif;
+    overflow-x: hidden;
+    visibility: hidden;
+}
+
+body.loaded {
+    visibility: visible;
+}
+
+/* Guide page container */
+.guide-page {
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('../images/background.png');
+    background-repeat: repeat;
+    background-size: 50px 50px;
+    background-position: 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 46px 18px 56px;
+    gap: 54px;
+    position: relative;
+    animation: backgroundFlow 10s linear infinite;
+}
+
+@keyframes backgroundFlow {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+/* Head section */
+.head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    width: 100%;
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.2s forwards;
+}
+
+/* Back button */
+.back-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    width: 43px;
+    height: 43px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.back-button:hover {
+    transform: scale(1.1);
+}
+
+.back-button:active {
+    transform: scale(0.95);
+}
+
+.back-icon {
+    width: 100%;
+    height: 100%;
+}
+
+/* Guide header */
+.guide-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Guide data card */
+.guide-data {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 13px;
+    box-shadow: 3px 3px 0px 0px black;
+    padding: 26px 7px;
+    width: 100%;
+    min-height: 357px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.guide-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Guide number */
+.guide-number {
+    font-family: 'Electrolize', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: white;
+    line-height: 106.285%;
+    text-align: center;
+    -webkit-text-stroke: 5px black;
+    text-stroke: 5px black;
+    paint-order: stroke fill;
+}
+
+/* Guide title */
+.guide-title {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: black;
+    text-align: center;
+    line-height: normal;
+}
+
+/* Guide description */
+.guide-description {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: #686868;
+    text-align: center;
+    line-height: normal;
+}
+
+/* YouTube container */
+.youtube-container {
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.youtube-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Paragraph section */
+.paragraph-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.4s forwards;
+}
+
+/* Paragraph header with highlight */
+.paragraph-header-wrapper {
+    margin-bottom: 6px;
+}
+
+.paragraph-header {
+    display: inline-block;
+    position: relative;
+}
+
+.paragraph-title {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    color: black;
+    text-align: left;
+    line-height: 1.5;
+    position: relative;
+    z-index: 2;
+    display: inline;
+}
+
+.paragraph-highlight {
+    background-color: #7fff00;
+    height: 13px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Paragraph text */
+.paragraph-text {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: black;
+    line-height: normal;
+    text-align: left;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .guide-page {
+        padding: 40px 16px 48px;
+        gap: 48px;
+    }
+
+    .guide-number {
+        font-size: 36px;
+        -webkit-text-stroke: 4px black;
+        text-stroke: 4px black;
+    }
+
+    .guide-title {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .guide-page {
+        padding: 32px 12px 40px;
+        gap: 40px;
+    }
+
+    .head {
+        gap: 12px;
+    }
+
+    .back-button {
+        width: 36px;
+        height: 36px;
+    }
+
+    .guide-data {
+        height: auto;
+        min-height: 357px;
+        padding: 20px 7px;
+    }
+
+    .guide-number {
+        font-size: 32px;
+        letter-spacing: 3px;
+    }
+
+    .guide-title {
+        font-size: 24px;
+    }
+
+    .guide-description {
+        font-size: 12px;
+    }
+
+    .youtube-container {
+        width: 100%;
+        max-width: 306px;
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+
+    .paragraph-title {
+        font-size: 14px;
+    }
+
+    .paragraph-text {
+        font-size: 12px;
+    }
+}
