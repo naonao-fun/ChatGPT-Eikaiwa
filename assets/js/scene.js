@@ -24,6 +24,23 @@ function copyToClipboard(text) {
     return navigator.clipboard.writeText(text);
 }
 
+// Add touch effect to step button
+function addTouchEffect(button) {
+    button.addEventListener('touchstart', () => {
+        button.classList.add('touch-active');
+    }, { passive: true });
+
+    button.addEventListener('touchend', () => {
+        setTimeout(() => {
+            button.classList.remove('touch-active');
+        }, 300);
+    }, { passive: true });
+
+    button.addEventListener('touchcancel', () => {
+        button.classList.remove('touch-active');
+    }, { passive: true });
+}
+
 // Render step buttons for 学習開始 tab
 function renderLearningSteps(container, steps) {
     container.innerHTML = "";
@@ -46,6 +63,7 @@ function renderLearningSteps(container, steps) {
             window.open("https://chatgpt.com/", "_blank", "noopener");
         });
 
+        addTouchEffect(button);
         container.appendChild(button);
     });
 }
@@ -54,6 +72,10 @@ function renderLearningSteps(container, steps) {
 function renderPromptSteps(container, steps) {
     container.innerHTML = "";
     steps.forEach((step, idx) => {
+        // Create wrapper for button and notification
+        const wrapper = document.createElement("div");
+        wrapper.className = "prompt-button-wrapper";
+
         const button = document.createElement("button");
         button.className = "step-button prompt-button";
         button.innerHTML = `
@@ -64,13 +86,17 @@ function renderPromptSteps(container, steps) {
             <div class="copy-icon-wrapper">
                 <img src="assets/images/copy-icon.svg" alt="Copy" class="copy-icon">
             </div>
-            <div class="copied-notification">
-                <div class="copied-main">
-                    <p class="copied-text">Copied!</p>
-                </div>
-                <div class="copied-arrow-wrapper">
-                    <img src="assets/images/copied-arrow.svg" alt="" class="copied-arrow">
-                </div>
+        `;
+
+        // Create notification outside the button
+        const notification = document.createElement("div");
+        notification.className = "copied-notification";
+        notification.innerHTML = `
+            <div class="copied-main">
+                <p class="copied-text">Copied!</p>
+            </div>
+            <div class="copied-arrow-wrapper">
+                <img src="assets/images/copied-arrow.svg" alt="" class="copied-arrow">
             </div>
         `;
 
@@ -80,25 +106,25 @@ function renderPromptSteps(container, steps) {
             copyToClipboard(textToCopy)
                 .then(() => {
                     // Show copied notification
-                    const notification = button.querySelector('.copied-notification');
-                    if (notification) {
-                        notification.classList.remove('show', 'hide');
-                        void notification.offsetWidth; // Trigger reflow
-                        notification.classList.add('show');
+                    notification.classList.remove('show', 'hide');
+                    void notification.offsetWidth; // Trigger reflow
+                    notification.classList.add('show');
 
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                        notification.classList.add('hide');
                         setTimeout(() => {
-                            notification.classList.remove('show');
-                            notification.classList.add('hide');
-                            setTimeout(() => {
-                                notification.classList.remove('hide');
-                            }, 300);
-                        }, 2000);
-                    }
+                            notification.classList.remove('hide');
+                        }, 300);
+                    }, 2000);
                 })
                 .catch(err => console.error('Failed to copy:', err));
         });
 
-        container.appendChild(button);
+        addTouchEffect(button);
+        wrapper.appendChild(button);
+        wrapper.appendChild(notification);
+        container.appendChild(wrapper);
     });
 }
 
@@ -151,6 +177,9 @@ function renderAudioSteps(container, audioUrl, stepCount = 2) {
     // Initialize audio players
     initializeAudioPlayers();
 }
+
+// Global flag to track if audio timeline is being dragged
+let isAudioTimelineDragging = false;
 
 // Initialize audio player functionality
 function initializeAudioPlayers() {
@@ -210,11 +239,66 @@ function initializeAudioPlayers() {
             audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
         });
 
+        // Click to seek
         timelineWrapper.addEventListener('click', (e) => {
             const rect = timelineWrapper.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
-            const percentage = clickX / rect.width;
+            const percentage = Math.max(0, Math.min(1, clickX / rect.width));
             audio.currentTime = percentage * audio.duration;
+        });
+
+        // Drag/swipe functionality for timeline handle
+        let isDragging = false;
+
+        function seekToPosition(clientX) {
+            const rect = timelineWrapper.getBoundingClientRect();
+            const offsetX = clientX - rect.left;
+            const percentage = Math.max(0, Math.min(1, offsetX / rect.width));
+            audio.currentTime = percentage * audio.duration;
+        }
+
+        // Mouse events
+        timelineHandle.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            isAudioTimelineDragging = true;
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                seekToPosition(e.clientX);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            isAudioTimelineDragging = false;
+        });
+
+        // Touch events
+        timelineHandle.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            isAudioTimelineDragging = true;
+            e.preventDefault();
+            e.stopPropagation();
+        }, { passive: false });
+
+        timelineWrapper.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            isAudioTimelineDragging = true;
+            seekToPosition(e.touches[0].clientX);
+            e.stopPropagation();
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                seekToPosition(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+            isAudioTimelineDragging = false;
         });
 
         audio.addEventListener('loadedmetadata', updateTimeDisplay);
@@ -334,19 +418,36 @@ function initializeAudioPlayers() {
         const tabContentWrapper = document.querySelector('.tab-content-wrapper');
         let touchStartX = 0;
         let touchEndX = 0;
+        let tabSwipeBlocked = false;
         const minSwipeDistance = 50;
         const tabOrder = ['start', 'prompt', 'audio'];
 
         tabContentWrapper.addEventListener('touchstart', (e) => {
+            // Block tab swipe if starting on audio timeline
+            const target = e.target;
+            if (target.closest('.audio-timeline-wrapper') || target.closest('.audio-timeline-handle')) {
+                tabSwipeBlocked = true;
+                return;
+            }
+            tabSwipeBlocked = false;
             touchStartX = e.changedTouches[0].screenX;
         }, { passive: true });
 
         tabContentWrapper.addEventListener('touchend', (e) => {
+            if (tabSwipeBlocked || isAudioTimelineDragging) {
+                tabSwipeBlocked = false;
+                return;
+            }
             touchEndX = e.changedTouches[0].screenX;
             handleSwipe();
         }, { passive: true });
 
         function handleSwipe() {
+            // Skip if audio timeline is being dragged
+            if (isAudioTimelineDragging) {
+                return;
+            }
+
             const swipeDistance = touchEndX - touchStartX;
 
             if (Math.abs(swipeDistance) < minSwipeDistance) {
