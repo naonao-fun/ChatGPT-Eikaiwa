@@ -1,0 +1,796 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Electrolize', 'Noto Sans JP', sans-serif;
+    overflow-x: hidden;
+    visibility: hidden;
+}
+
+body.loaded {
+    visibility: visible;
+}
+
+/* Scene page container */
+.scene-page {
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('../images/background.png');
+    background-repeat: repeat;
+    background-size: 50px 50px;
+    background-position: 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 46px 18px 56px;
+    gap: 54px;
+    position: relative;
+    animation: backgroundFlow 10s linear infinite;
+}
+
+@keyframes backgroundFlow {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+/* Header Section */
+.scene-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 700px;
+    padding-bottom: 31px;
+    position: relative;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.2s forwards;
+}
+
+/* Back button */
+.back-button {
+    background: transparent;
+    border: none;
+    width: 43px;
+    height: 43px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: -31px;
+    z-index: 10;
+    padding: 0;
+    transition: transform 0.3s ease;
+}
+
+.back-button:hover {
+    transform: scale(1.1);
+}
+
+.back-button:active {
+    transform: scale(0.95);
+}
+
+.back-arrow {
+    width: 100%;
+    height: 100%;
+}
+
+/* Header content */
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 44px;
+    position: relative;
+}
+
+/* Scene image wrapper */
+.scene-image-wrapper {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 70.5px;
+    padding: 3px;
+    width: 123px;
+    height: 123px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: -44px;
+    z-index: 2;
+    position: relative;
+}
+
+.scene-image {
+    width: 117px;
+    height: 117px;
+    border-radius: 63px;
+    object-fit: cover;
+}
+
+/* Scene info card */
+.scene-info-card {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 13px;
+    box-shadow: 3px 3px 0px 0px black;
+    width: 100%;
+    height: 267px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 40px 7px;
+    margin-bottom: -44px;
+    z-index: 1;
+    position: relative;
+}
+
+.scene-info-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Metadata */
+.metadata {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.category-tag,
+.level-tag {
+    background-color: black;
+    color: white;
+    font-family: 'Roboto', 'Noto Sans JP', 'Noto Sans Symbols 2', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+}
+
+.level-tag {
+    width: 87px;
+    padding: 0;
+}
+
+/* Scene number */
+.scene-number {
+    font-family: 'Electrolize', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: white;
+    text-align: center;
+    line-height: 106.285%;
+    -webkit-text-stroke: 6px black;
+    text-stroke: 6px black;
+    paint-order: stroke fill;
+}
+
+/* Scene location */
+.scene-location {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: black;
+    text-align: center;
+}
+
+/* Scene title */
+.scene-title {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: black;
+    text-align: center;
+}
+
+/* Tabs Section */
+.tabs-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.4s forwards;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 28px;
+    padding: 0 11px;
+    width: 100%;
+}
+
+.tab {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 11px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.tab-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: black;
+    text-align: center;
+    white-space: nowrap;
+    margin-bottom: -11px;
+    z-index: 2;
+    position: relative;
+    width: 100%;
+}
+
+.tab.active .tab-text {
+    font-weight: 900;
+}
+
+.tab-underline {
+    background-color: #7fff00;
+    height: 13px;
+    width: 100%;
+    margin-bottom: -11px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tab.active .tab-underline {
+    opacity: 1;
+}
+
+/* Tab Content */
+.tab-content-wrapper {
+    width: 100%;
+    max-width: 700px;
+}
+
+.tab-content {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    width: 100%;
+}
+
+.tab-content.active {
+    display: flex;
+}
+
+/* Step buttons */
+.step-button {
+    background-color: #7fff00;
+    border: 2px solid black;
+    border-radius: 7px;
+    box-shadow: 3px 3px 0px 0px black;
+    height: 72px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 19px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: visible;
+    opacity: 0;
+}
+
+.step-button.animate-in {
+    animation: buttonSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.step-button:nth-child(1).animate-in {
+    animation-delay: 0.6s;
+}
+
+.step-button:nth-child(2).animate-in {
+    animation-delay: 0.65s;
+}
+
+.step-button:nth-child(3).animate-in {
+    animation-delay: 0.7s;
+}
+
+/* Quick animations for tab switching */
+.step-button.animate-in.quick {
+    animation-delay: 0s !important;
+}
+
+.step-button:nth-child(1).animate-in.quick {
+    animation-delay: 0.05s !important;
+}
+
+.step-button:nth-child(2).animate-in.quick {
+    animation-delay: 0.1s !important;
+}
+
+.step-button:nth-child(3).animate-in.quick {
+    animation-delay: 0.15s !important;
+}
+
+.step-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+    pointer-events: none;
+}
+
+.step-button:hover::before {
+    width: 200%;
+    height: 200%;
+}
+
+.step-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0px 0px black;
+}
+
+.step-button:active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px 0px black;
+}
+
+.step-text {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 600;
+    color: black;
+    display: flex;
+    align-items: baseline;
+    position: relative;
+    z-index: 1;
+}
+
+.step-number {
+    font-size: 32px;
+}
+
+.step-label {
+    font-size: 20px;
+}
+
+.step-arrow {
+    width: 25px;
+    height: 19.7px;
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Copy icon wrapper for prompt buttons */
+.copy-icon-wrapper {
+    background-color: black;
+    border-radius: 5px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    padding: 5.5px;
+}
+
+.copy-icon {
+    width: 100%;
+    height: 100%;
+}
+
+/* Copied notification */
+.copied-notification {
+    position: absolute;
+    top: -48px;
+    right: 10px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    z-index: 100;
+}
+
+.copied-notification.show {
+    animation: copiedSlideIn 0.3s ease-out forwards;
+}
+
+.copied-notification.hide {
+    animation: copiedSlideOut 0.3s ease-out forwards;
+}
+
+.copied-main {
+    background-color: #7fff00;
+    border-radius: 12px;
+    padding: 12px 20px;
+    box-shadow: 3px 3px 0px 0px black;
+    position: relative;
+}
+
+.copied-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: black;
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* Triangle arrow pointing down using CSS */
+/* Shadow triangle */
+.copied-main::before {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 15px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid black;
+    z-index: -1;
+}
+
+/* Main triangle */
+.copied-main::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 12px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #7fff00;
+}
+
+.copied-arrow-wrapper {
+    display: none;
+}
+
+.copied-arrow {
+    display: none;
+}
+
+/* Audio tab content */
+.audio-card {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 7px;
+    box-shadow: 3px 3px 0px 0px black;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 23px 27px;
+    gap: 17px;
+    opacity: 0;
+    overflow: visible;
+}
+
+.audio-card.animate-in {
+    animation: buttonSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.audio-card:nth-child(1).animate-in {
+    animation-delay: 0.6s;
+}
+
+.audio-card:nth-child(2).animate-in {
+    animation-delay: 0.65s;
+}
+
+/* Quick animations for tab switching */
+.audio-card.animate-in.quick {
+    animation-delay: 0s !important;
+}
+
+.audio-card:nth-child(1).animate-in.quick {
+    animation-delay: 0.05s !important;
+}
+
+.audio-card:nth-child(2).animate-in.quick {
+    animation-delay: 0.1s !important;
+}
+
+.audio-label {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 600;
+    color: black;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+}
+
+.audio-step-number {
+    font-size: 20px;
+}
+
+.audio-step-text {
+    font-size: 16px;
+}
+
+/* Audio timeline section */
+.audio-timeline-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 700px;
+}
+
+.audio-time-start,
+.audio-time-end {
+    font-family: 'Electrolize', sans-serif;
+    font-size: 11px;
+    color: black;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.audio-timeline-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 100px;
+    max-width: 400px;
+    height: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.audio-timeline-track {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: #d9d9d9;
+    border-radius: 2px;
+}
+
+.audio-timeline-progress {
+    position: absolute;
+    width: 0%;
+    height: 4px;
+    background-color: #595959;
+    border-radius: 2px;
+    transition: width 0.1s linear;
+}
+
+.audio-timeline-handle {
+    position: absolute;
+    left: 0%;
+    width: 14px;
+    height: 14px;
+    background-color: #7fff00;
+    border: 2px solid black;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    transition: left 0.1s linear;
+    pointer-events: none;
+    z-index: 2;
+    box-shadow: 1px 1px 0px 0px black;
+}
+
+/* Audio controls */
+.audio-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 42px;
+    width: 100%;
+    overflow: visible;
+    padding: 10px;
+}
+
+.audio-rewind-button,
+.audio-play-button,
+.audio-forward-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.audio-rewind-button:hover,
+.audio-play-button:hover,
+.audio-forward-button:hover {
+    transform: scale(1.1);
+}
+
+.audio-rewind-button:active,
+.audio-play-button:active,
+.audio-forward-button:active {
+    transform: scale(0.95);
+}
+
+.audio-rewind-icon,
+.audio-forward-icon {
+    width: 32px;
+    height: 36px;
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.audio-play-icon {
+    width: 50px;
+    height: 50px;
+    display: block;
+    flex-shrink: 0;
+    filter: drop-shadow(1.5px 1.5px 0px rgba(0, 0, 0, 1));
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.audio-element {
+    display: none;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes buttonSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateY(-3px) scale(1.01);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes copiedSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes copiedSlideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .scene-page {
+        padding: 40px 16px 48px;
+        gap: 40px;
+    }
+
+    .scene-number {
+        font-size: 36px;
+        -webkit-text-stroke: 5px black;
+        text-stroke: 5px black;
+    }
+
+    .scene-title {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .scene-page {
+        padding: 32px 12px 40px;
+        gap: 32px;
+    }
+
+    .scene-header {
+        padding-bottom: 20px;
+    }
+
+    .scene-info-card {
+        height: auto;
+        min-height: 240px;
+        padding: 35px 7px;
+    }
+
+    .scene-number {
+        font-size: 32px;
+    }
+
+    .scene-location {
+        font-size: 16px;
+    }
+
+    .scene-title {
+        font-size: 22px;
+    }
+
+    .tabs {
+        gap: 20px;
+        padding: 0 5px;
+    }
+
+    .tab-text {
+        font-size: 18px;
+    }
+
+    .step-button {
+        height: 64px;
+        padding: 16px 20px;
+    }
+
+    .step-number {
+        font-size: 28px;
+    }
+
+    .step-label {
+        font-size: 18px;
+    }
+
+    .step-arrow {
+        width: 20px;
+        height: 15.8px;
+    }
+
+    .copy-icon-wrapper {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+    }
+}

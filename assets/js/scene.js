@@ -1,0 +1,393 @@
+// Scene page dynamic rendering
+
+// Get scene ID from URL parameter
+function getSceneId() {
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
+    return id ? id.padStart(3, "0") : null;
+}
+
+// Convert level number to stars
+function stars(level) {
+    const starMap = {
+        1: "★☆☆☆",
+        2: "★★☆☆",
+        3: "★★★☆",
+        4: "★★★★"
+    };
+    return starMap[level] || "★☆☆☆";
+}
+
+// Copy text to clipboard
+function copyToClipboard(text) {
+    if (!text) return Promise.reject();
+    return navigator.clipboard.writeText(text);
+}
+
+// Render step buttons for 学習開始 tab
+function renderLearningSteps(container, steps) {
+    container.innerHTML = "";
+    steps.forEach((step, idx) => {
+        const button = document.createElement("button");
+        button.className = "step-button";
+        button.innerHTML = `
+            <span class="step-text">
+                <span class="step-number">${step.label || `STEP ${idx + 1}`} </span>
+                <span class="step-label">を開始する</span>
+            </span>
+            <img src="assets/images/right-arrow.svg" alt="" class="step-arrow">
+        `;
+
+        button.addEventListener("click", () => {
+            // Copy prompt and open ChatGPT
+            if (step.prompt) {
+                copyToClipboard(step.prompt).catch(err => console.error('Failed to copy:', err));
+            }
+            window.open("https://chatgpt.com/", "_blank", "noopener");
+        });
+
+        container.appendChild(button);
+    });
+}
+
+// Render step buttons for プロンプト tab
+function renderPromptSteps(container, steps) {
+    container.innerHTML = "";
+    steps.forEach((step, idx) => {
+        const button = document.createElement("button");
+        button.className = "step-button prompt-button";
+        button.innerHTML = `
+            <span class="step-text">
+                <span class="step-number">${step.label || `STEP ${idx + 1}`} </span>
+                <span class="step-label">プロンプトをコピー</span>
+            </span>
+            <div class="copy-icon-wrapper">
+                <img src="assets/images/copy-icon.svg" alt="Copy" class="copy-icon">
+            </div>
+            <div class="copied-notification">
+                <div class="copied-main">
+                    <p class="copied-text">Copied!</p>
+                </div>
+                <div class="copied-arrow-wrapper">
+                    <img src="assets/images/copied-arrow.svg" alt="" class="copied-arrow">
+                </div>
+            </div>
+        `;
+
+        button.addEventListener("click", () => {
+            const textToCopy = step.text || `[${step.label || `STEP ${idx + 1}`}のプロンプトをここに入力してください]`;
+
+            copyToClipboard(textToCopy)
+                .then(() => {
+                    // Show copied notification
+                    const notification = button.querySelector('.copied-notification');
+                    if (notification) {
+                        notification.classList.remove('show', 'hide');
+                        void notification.offsetWidth; // Trigger reflow
+                        notification.classList.add('show');
+
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                            notification.classList.add('hide');
+                            setTimeout(() => {
+                                notification.classList.remove('hide');
+                            }, 300);
+                        }, 2000);
+                    }
+                })
+                .catch(err => console.error('Failed to copy:', err));
+        });
+
+        container.appendChild(button);
+    });
+}
+
+// Render audio players for 見本音声 tab
+function renderAudioSteps(container, audioUrl, stepCount = 2) {
+    container.innerHTML = "";
+
+    if (!audioUrl) {
+        container.innerHTML = '<p style="text-align: center; color: #686868;">音声データがありません</p>';
+        return;
+    }
+
+    for (let i = 1; i <= stepCount; i++) {
+        const audioCard = document.createElement("div");
+        audioCard.className = "audio-card";
+        audioCard.setAttribute("data-audio-step", i);
+        audioCard.innerHTML = `
+            <div class="audio-label">
+                <span class="audio-step-number">STEP ${i} </span>
+                <span class="audio-step-text">見本音声</span>
+            </div>
+            <div class="audio-timeline-section">
+                <span class="audio-time-start">0:00</span>
+                <div class="audio-timeline-wrapper">
+                    <div class="audio-timeline-track"></div>
+                    <div class="audio-timeline-progress"></div>
+                    <div class="audio-timeline-handle"></div>
+                </div>
+                <span class="audio-time-end">0:00</span>
+            </div>
+            <div class="audio-controls">
+                <button class="audio-rewind-button" aria-label="Rewind 10 seconds">
+                    <img src="assets/images/rewind-10.svg" alt="" class="audio-rewind-icon">
+                </button>
+                <button class="audio-play-button" aria-label="Play">
+                    <img src="assets/images/play-large.svg" alt="" class="audio-play-icon">
+                </button>
+                <button class="audio-forward-button" aria-label="Forward 10 seconds">
+                    <img src="assets/images/forward-10.svg" alt="" class="audio-forward-icon">
+                </button>
+            </div>
+            <audio class="audio-element" preload="metadata">
+                <source src="${audioUrl}" type="audio/mpeg">
+            </audio>
+        `;
+
+        container.appendChild(audioCard);
+    }
+
+    // Initialize audio players
+    initializeAudioPlayers();
+}
+
+// Initialize audio player functionality
+function initializeAudioPlayers() {
+    const audioCards = document.querySelectorAll('.audio-card');
+
+    audioCards.forEach(card => {
+        const audio = card.querySelector('.audio-element');
+        const playButton = card.querySelector('.audio-play-button');
+        const playIcon = card.querySelector('.audio-play-icon');
+        const rewindButton = card.querySelector('.audio-rewind-button');
+        const forwardButton = card.querySelector('.audio-forward-button');
+        const timeStart = card.querySelector('.audio-time-start');
+        const timeEnd = card.querySelector('.audio-time-end');
+        const timelineWrapper = card.querySelector('.audio-timeline-wrapper');
+        const timelineProgress = card.querySelector('.audio-timeline-progress');
+        const timelineHandle = card.querySelector('.audio-timeline-handle');
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimeDisplay() {
+            timeStart.textContent = formatTime(audio.currentTime);
+            timeEnd.textContent = formatTime(audio.duration || 0);
+        }
+
+        function updateTimeline() {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                timelineProgress.style.width = `${progress}%`;
+                timelineHandle.style.left = `${progress}%`;
+            }
+        }
+
+        playButton.addEventListener('click', () => {
+            if (audio.paused) {
+                document.querySelectorAll('.audio-element').forEach(otherAudio => {
+                    if (otherAudio !== audio && !otherAudio.paused) {
+                        otherAudio.pause();
+                    }
+                });
+                audio.play();
+                playIcon.src = 'assets/images/pause-large.svg';
+            } else {
+                audio.pause();
+                playIcon.src = 'assets/images/play-large.svg';
+            }
+        });
+
+        rewindButton.addEventListener('click', () => {
+            audio.currentTime = Math.max(0, audio.currentTime - 10);
+        });
+
+        forwardButton.addEventListener('click', () => {
+            audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+        });
+
+        timelineWrapper.addEventListener('click', (e) => {
+            const rect = timelineWrapper.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            audio.currentTime = percentage * audio.duration;
+        });
+
+        audio.addEventListener('loadedmetadata', updateTimeDisplay);
+        audio.addEventListener('timeupdate', () => {
+            updateTimeDisplay();
+            updateTimeline();
+        });
+        audio.addEventListener('ended', () => {
+            playIcon.src = 'assets/images/play-large.svg';
+            audio.currentTime = 0;
+            updateTimeline();
+        });
+        audio.addEventListener('pause', () => {
+            playIcon.src = 'assets/images/play-large.svg';
+        });
+        audio.addEventListener('play', () => {
+            playIcon.src = 'assets/images/pause-large.svg';
+        });
+
+        updateTimeDisplay();
+    });
+}
+
+// Main initialization
+(function main() {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Prevent flash of content before animation
+        document.body.classList.add('loaded');
+
+        const id = getSceneId();
+        const scene = window.SCENES?.find(s => s.id === id);
+
+        if (!scene) {
+            document.body.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 20px; padding: 20px;">
+                    <h1 style="font-size: 24px; color: #333;">シーンが見つかりません</h1>
+                    <p style="color: #666;">ID: ${id || "(指定なし)"}</p>
+                    <a href="contents.html" style="color: #7fff00; text-decoration: none; padding: 10px 20px; border: 2px solid black; border-radius: 8px;">Contentsへ戻る</a>
+                </div>
+            `;
+            return;
+        }
+
+        // Update page title
+        document.getElementById('pageTitle').textContent = `SCENE ${scene.id} - ChatGPT英会話`;
+
+        // Update header info
+        document.getElementById('categoryTag').textContent = scene.category;
+        document.getElementById('levelTag').textContent = stars(scene.level);
+        document.getElementById('sceneNumber').textContent = `SCENE ${scene.id}`;
+        document.getElementById('sceneLocation').textContent = scene.place;
+        document.getElementById('sceneTitle').textContent = scene.title;
+
+        // Render tabs content
+        renderLearningSteps(document.getElementById('start-content'), scene.learningSteps || []);
+        renderPromptSteps(document.getElementById('prompt-content'), scene.promptSteps || []);
+        renderAudioSteps(document.getElementById('audio-content'), scene.sampleAudioUrl);
+
+        // Tab switching functionality (from scene001.js)
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        function switchTab(targetTab) {
+            // Remove active class from all tabs
+            tabs.forEach(t => t.classList.remove('active'));
+
+            // Add active class to target tab
+            const targetTabElement = document.querySelector(`[data-tab="${targetTab}"]`);
+            if (targetTabElement) {
+                targetTabElement.classList.add('active');
+            }
+
+            // Hide all tab contents
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show target tab content
+            const targetContent = document.getElementById(`${targetTab}-content`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+
+                // Re-trigger animations for the new tab content
+                setTimeout(() => {
+                    const buttons = targetContent.querySelectorAll('.step-button');
+                    const cards = targetContent.querySelectorAll('.audio-card');
+
+                    buttons.forEach(button => {
+                        button.classList.remove('animate-in', 'quick');
+                        void button.offsetWidth; // Trigger reflow
+                        button.classList.add('animate-in', 'quick');
+                    });
+
+                    cards.forEach(card => {
+                        card.classList.remove('animate-in', 'quick');
+                        void card.offsetWidth; // Trigger reflow
+                        card.classList.add('animate-in', 'quick');
+                    });
+                }, 50);
+            }
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetTab = this.getAttribute('data-tab');
+                switchTab(targetTab);
+
+                // Add click animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Swipe functionality for tab content
+        const tabContentWrapper = document.querySelector('.tab-content-wrapper');
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const minSwipeDistance = 50;
+        const tabOrder = ['start', 'prompt', 'audio'];
+
+        tabContentWrapper.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        tabContentWrapper.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeDistance = touchEndX - touchStartX;
+
+            if (Math.abs(swipeDistance) < minSwipeDistance) {
+                return;
+            }
+
+            // Get current active tab
+            const activeTab = document.querySelector('.tab.active');
+            if (!activeTab) return;
+
+            const currentTab = activeTab.getAttribute('data-tab');
+            const currentIndex = tabOrder.indexOf(currentTab);
+
+            let nextIndex;
+            if (swipeDistance > 0) {
+                // Swipe right - go to previous tab
+                nextIndex = currentIndex - 1;
+            } else {
+                // Swipe left - go to next tab
+                nextIndex = currentIndex + 1;
+            }
+
+            // Check if next index is valid
+            if (nextIndex >= 0 && nextIndex < tabOrder.length) {
+                switchTab(tabOrder[nextIndex]);
+            }
+        }
+
+        // Back button functionality
+        const backButton = document.querySelector('.back-button');
+        backButton.addEventListener('click', () => {
+            window.location.href = 'contents.html';
+        });
+
+        // Trigger animations
+        setTimeout(() => {
+            const stepButtons = document.querySelectorAll('.step-button');
+            const audioCards = document.querySelectorAll('.audio-card');
+
+            stepButtons.forEach(button => button.classList.add('animate-in'));
+            audioCards.forEach(card => card.classList.add('animate-in'));
+        }, 100);
+    });
+})();

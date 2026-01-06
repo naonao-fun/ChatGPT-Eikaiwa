@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">SCENE - ChatGPT英会話</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&family=Noto+Sans+JP:wght@400;700;900&family=Roboto:wght@400;600;800;900&family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/scene.css">
+</head>
+<body>
+    <div class="scene-page">
+        <!-- Header Section -->
+        <div class="scene-header">
+            <button class="back-button">
+                <img src="assets/images/back-arrow.svg" alt="Back" class="back-arrow">
+            </button>
+            <div class="header-content">
+                <div class="scene-image-wrapper">
+                    <img src="assets/images/scene-image.png" alt="SCENE" class="scene-image" id="sceneImage">
+                </div>
+                <div class="scene-info-card">
+                    <div class="scene-info-content">
+                        <div class="metadata">
+                            <span class="category-tag" id="categoryTag"></span>
+                            <span class="level-tag" id="levelTag"></span>
+                        </div>
+                        <div class="scene-number" id="sceneNumber"></div>
+                        <div class="scene-location" id="sceneLocation"></div>
+                        <div class="scene-title" id="sceneTitle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Section -->
+        <div class="tabs-section">
+            <div class="tabs">
+                <button class="tab active" data-tab="start">
+                    <span class="tab-text">学習開始</span>
+                    <div class="tab-underline"></div>
+                </button>
+                <button class="tab" data-tab="prompt">
+                    <span class="tab-text">プロンプト</span>
+                    <div class="tab-underline"></div>
+                </button>
+                <button class="tab" data-tab="audio">
+                    <span class="tab-text">見本音声</span>
+                    <div class="tab-underline"></div>
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content-wrapper">
+                <!-- 学習開始 Tab -->
+                <div class="tab-content active" id="start-content">
+                    <!-- Will be populated dynamically -->
+                </div>
+
+                <!-- プロンプト Tab -->
+                <div class="tab-content" id="prompt-content">
+                    <!-- Will be populated dynamically -->
+                </div>
+
+                <!-- 見本音声 Tab -->
+                <div class="tab-content" id="audio-content">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/scenes-data.js"></script>
+    <script src="assets/js/scene.js"></script>
+</body>
+</html>
