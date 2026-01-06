@@ -168,13 +168,13 @@ body.loaded {
 .scene-number {
     font-family: 'Electrolize', sans-serif;
     font-size: 40px;
-    font-weight: 400;
+    font-weight: 700;
     letter-spacing: 4px;
     color: white;
     text-align: center;
     line-height: 106.285%;
-    -webkit-text-stroke: 4px black;
-    text-stroke: 4px black;
+    -webkit-text-stroke: 6px black;
+    text-stroke: 6px black;
     paint-order: stroke fill;
 }
 
@@ -297,6 +297,40 @@ body.loaded {
     transition: all 0.3s ease;
     position: relative;
     overflow: visible;
+    opacity: 0;
+}
+
+.step-button.animate-in {
+    animation: buttonSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.step-button:nth-child(1).animate-in {
+    animation-delay: 0.6s;
+}
+
+.step-button:nth-child(2).animate-in {
+    animation-delay: 0.65s;
+}
+
+.step-button:nth-child(3).animate-in {
+    animation-delay: 0.7s;
+}
+
+/* Quick animations for tab switching */
+.step-button.animate-in.quick {
+    animation-delay: 0s !important;
+}
+
+.step-button:nth-child(1).animate-in.quick {
+    animation-delay: 0.05s !important;
+}
+
+.step-button:nth-child(2).animate-in.quick {
+    animation-delay: 0.1s !important;
+}
+
+.step-button:nth-child(3).animate-in.quick {
+    animation-delay: 0.15s !important;
 }
 
 .step-button::before {
@@ -460,6 +494,33 @@ body.loaded {
     justify-content: center;
     padding: 23px 27px;
     gap: 17px;
+    opacity: 0;
+    overflow: visible;
+}
+
+.audio-card.animate-in {
+    animation: buttonSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.audio-card:nth-child(1).animate-in {
+    animation-delay: 0.6s;
+}
+
+.audio-card:nth-child(2).animate-in {
+    animation-delay: 0.65s;
+}
+
+/* Quick animations for tab switching */
+.audio-card.animate-in.quick {
+    animation-delay: 0s !important;
+}
+
+.audio-card:nth-child(1).animate-in.quick {
+    animation-delay: 0.05s !important;
+}
+
+.audio-card:nth-child(2).animate-in.quick {
+    animation-delay: 0.1s !important;
 }
 
 .audio-label {
@@ -540,6 +601,7 @@ body.loaded {
     transition: left 0.1s linear;
     pointer-events: none;
     z-index: 2;
+    box-shadow: 1px 1px 0px 0px black;
 }
 
 /* Audio controls */
@@ -549,6 +611,8 @@ body.loaded {
     justify-content: center;
     gap: 42px;
     width: 100%;
+    overflow: visible;
+    padding: 10px;
 }
 
 .audio-rewind-button,
@@ -579,17 +643,21 @@ body.loaded {
 
 .audio-rewind-icon,
 .audio-forward-icon {
-    width: 21px;
-    height: 24px;
+    width: 32px;
+    height: 36px;
     display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .audio-play-icon {
-    width: 34px;
-    height: 34px;
+    width: 50px;
+    height: 50px;
     display: block;
     flex-shrink: 0;
-    filter: drop-shadow(1px 1px 0px rgba(0, 0, 0, 1));
+    filter: drop-shadow(1.5px 1.5px 0px rgba(0, 0, 0, 1));
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .audio-element {
@@ -603,6 +671,21 @@ body.loaded {
     }
     to {
         opacity: 1;
+    }
+}
+
+@keyframes buttonSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateY(-3px) scale(1.01);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 
@@ -637,8 +720,8 @@ body.loaded {
 
     .scene-number {
         font-size: 36px;
-        -webkit-text-stroke: 2.5px black;
-        text-stroke: 2.5px black;
+        -webkit-text-stroke: 5px black;
+        text-stroke: 5px black;
     }
 
     .scene-title {
@@ -680,7 +763,7 @@ body.loaded {
     }
 
     .tab-text {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .step-button {

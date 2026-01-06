@@ -94,7 +94,7 @@ body.loaded {
     flex-direction: column;
     justify-content: center;
     font-family: 'Electrolize', 'Noto Sans JP', sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     text-align: center;
     color: white;
     width: 100%;
@@ -106,16 +106,16 @@ body.loaded {
     font-size: 48px;
     letter-spacing: 17.28px;
     margin-bottom: 30px;
-    -webkit-text-stroke: 4px black;
-    text-stroke: 4px black;
+    -webkit-text-stroke: 5px black;
+    text-stroke: 5px black;
     paint-order: stroke fill;
 }
 
 .title-line-2 {
     font-size: 40px;
     letter-spacing: 14.4px;
-    -webkit-text-stroke: 4px black;
-    text-stroke: 4px black;
+    -webkit-text-stroke: 5px black;
+    text-stroke: 5px black;
     paint-order: stroke fill;
 }
 
@@ -125,7 +125,7 @@ body.loaded {
     flex-direction: column;
     justify-content: center;
     font-family: 'Electrolize', 'Noto Sans JP', sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 20px;
     letter-spacing: 1.6px;
     text-align: center;

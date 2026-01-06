@@ -4,6 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Prevent flash of content before animation
     document.body.classList.add('loaded');
 
+    // Trigger animations for step buttons and audio cards
+    function triggerAnimations() {
+        const stepButtons = document.querySelectorAll('.step-button');
+        const audioCards = document.querySelectorAll('.audio-card');
+
+        stepButtons.forEach(button => {
+            button.classList.add('animate-in');
+        });
+
+        audioCards.forEach(card => {
+            card.classList.add('animate-in');
+        });
+    }
+
+    // Trigger animations on page load
+    setTimeout(triggerAnimations, 100);
+
     // Tab switching functionality
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -28,6 +45,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetContent = document.getElementById(`${targetTab}-content`);
         if (targetContent) {
             targetContent.classList.add('active');
+
+            // Re-trigger animations for the new tab content
+            setTimeout(() => {
+                const buttons = targetContent.querySelectorAll('.step-button');
+                const cards = targetContent.querySelectorAll('.audio-card');
+
+                buttons.forEach(button => {
+                    button.classList.remove('animate-in', 'quick');
+                    void button.offsetWidth; // Trigger reflow
+                    button.classList.add('animate-in', 'quick');
+                });
+
+                cards.forEach(card => {
+                    card.classList.remove('animate-in', 'quick');
+                    void card.offsetWidth; // Trigger reflow
+                    card.classList.add('animate-in', 'quick');
+                });
+            }, 50);
         }
     }
 
@@ -299,8 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Failed to copy prompt:', err);
                 });
             } else {
-                // Example navigation for start buttons - replace with actual functionality
-                // window.location.href = `step${stepNumber}.html`;
+                // Navigate to ChatGPT in new tab
+                window.open('https://chatgpt.com/', '_blank');
             }
         });
     });

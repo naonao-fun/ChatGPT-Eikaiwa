@@ -98,7 +98,7 @@ body.loaded {
 .page-title {
     font-family: 'Electrolize', sans-serif;
     font-size: 36px;
-    font-weight: 400;
+    font-weight: 700;
     letter-spacing: 10.08px;
     text-align: center;
     color: white;
@@ -288,7 +288,7 @@ body.loaded {
 .scene-number {
     font-family: 'Electrolize', sans-serif;
     font-size: 30px;
-    font-weight: 400;
+    font-weight: 700;
     color: white;
     line-height: 1;
     -webkit-text-stroke: 4px black;
@@ -450,13 +450,13 @@ body.loaded {
 .menu-link {
     font-family: 'Electrolize', sans-serif;
     font-size: 36px;
-    font-weight: 400;
+    font-weight: 700;
     letter-spacing: 10.08px;
     text-align: center;
     color: white;
     line-height: 1.261;
-    -webkit-text-stroke: 5px black;
-    text-stroke: 5px black;
+    -webkit-text-stroke: 6px black;
+    text-stroke: 6px black;
     paint-order: stroke fill;
     text-decoration: none;
     width: 100%;
@@ -515,8 +515,8 @@ body.loaded {
     .page-title {
         font-size: 32px;
         letter-spacing: 8px;
-        -webkit-text-stroke: 2.5px black;
-        text-stroke: 2.5px black;
+        -webkit-text-stroke: 5px black;
+        text-stroke: 5px black;
     }
 
     .filter-buttons {
@@ -543,6 +543,8 @@ body.loaded {
     .page-title {
         font-size: 28px;
         letter-spacing: 6px;
+        -webkit-text-stroke: 4px black;
+        text-stroke: 4px black;
     }
 
     .filter-btn {
@@ -590,8 +592,8 @@ body.loaded {
     .menu-link {
         font-size: 32px;
         letter-spacing: 8px;
-        -webkit-text-stroke: 2.5px black;
-        text-stroke: 2.5px black;
+        -webkit-text-stroke: 5px black;
+        text-stroke: 5px black;
     }
 
     .close-button {
