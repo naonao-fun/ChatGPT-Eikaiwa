@@ -1,0 +1,474 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Electrolize', 'Noto Sans JP', sans-serif;
+    overflow-x: hidden;
+    visibility: hidden;
+}
+
+body.loaded {
+    visibility: visible;
+}
+
+/* Guides page container */
+.guides-page {
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('../images/background.png');
+    background-repeat: repeat;
+    background-size: 50px 50px;
+    background-position: 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    gap: 32px;
+    position: relative;
+    animation: backgroundFlow 10s linear infinite;
+}
+
+@keyframes backgroundFlow {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+/* Head section */
+.head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    max-width: 700px;
+    padding-bottom: 14px;
+    padding-right: 0;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.2s forwards;
+}
+
+/* Menu button */
+.menu-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: -14px;
+    transition: transform 0.3s ease;
+    z-index: 10;
+}
+
+.menu-button:hover {
+    transform: scale(1.1);
+}
+
+.menu-button:active {
+    transform: scale(0.95);
+}
+
+.menu-icon {
+    width: 32px;
+    height: 32px;
+}
+
+/* Header */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    width: 100%;
+    margin-bottom: -14px;
+}
+
+/* Page title */
+.page-title {
+    font-family: 'Electrolize', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 10.08px;
+    text-align: center;
+    color: white;
+    line-height: 1.261;
+    -webkit-text-stroke: 5px black;
+    text-stroke: 5px black;
+    paint-order: stroke fill;
+}
+
+/* Guides list */
+.guides-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.4s forwards;
+}
+
+/* Guide card */
+.guide-card {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 13px;
+    box-shadow: 3px 3px 0px 0px black;
+    padding: 10px 32px;
+    width: 100%;
+    min-height: 126px;
+    max-height: 126px;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    text-decoration: none;
+}
+
+.guide-card.animate-in {
+    animation: cardSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Staggered animation */
+.guide-card:nth-child(1).animate-in {
+    animation-delay: 0.5s;
+}
+
+.guide-card:nth-child(2).animate-in {
+    animation-delay: 0.55s;
+}
+
+.guide-card:nth-child(3).animate-in {
+    animation-delay: 0.6s;
+}
+
+.guide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 5px 5px 0px 0px black;
+}
+
+.guide-card:active {
+    transform: translateY(0);
+    box-shadow: 2px 2px 0px 0px black;
+}
+
+/* Guide data */
+.guide-data {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 222px;
+    overflow: hidden;
+}
+
+/* Guide number */
+.guide-number {
+    font-family: 'Electrolize', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    -webkit-text-stroke: 4px black;
+    text-stroke: 4px black;
+    paint-order: stroke fill;
+}
+
+/* Guide title */
+.guide-title {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: black;
+    line-height: 1.09;
+}
+
+/* Guide description */
+.guide-description {
+    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: #686868;
+    line-height: 1.09;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes cardSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateY(-3px) scale(1.01);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Menu overlay */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(233, 231, 231, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 700px;
+    height: 100%;
+    position: relative;
+}
+
+/* Close button */
+.close-button {
+    background: transparent;
+    border: none;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    transition: transform 0.3s ease;
+}
+
+.close-button:hover {
+    transform: rotate(90deg) scale(1.1);
+}
+
+.close-button:active {
+    transform: rotate(90deg) scale(0.95);
+}
+
+.close-icon {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-line {
+    position: absolute;
+    width: 3px;
+    height: 30px;
+    background-color: black;
+    border-radius: 1.5px;
+}
+
+.close-line-1 {
+    transform: rotate(45deg);
+}
+
+.close-line-2 {
+    transform: rotate(135deg);
+}
+
+/* Menu navigation */
+.menu-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 41px;
+    width: 100%;
+    flex: 1;
+    padding-bottom: 56px;
+}
+
+.menu-link {
+    font-family: 'Electrolize', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 10.08px;
+    text-align: center;
+    color: white;
+    line-height: 1.261;
+    -webkit-text-stroke: 6px black;
+    text-stroke: 6px black;
+    paint-order: stroke fill;
+    text-decoration: none;
+    width: 100%;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.menu-overlay.active .menu-link {
+    animation: menuLinkSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.menu-overlay.active .menu-link:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.menu-overlay.active .menu-link:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.menu-overlay.active .menu-link:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.menu-link:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 20px rgba(127, 255, 0, 0.5);
+}
+
+.menu-link:active {
+    transform: scale(0.95);
+}
+
+@keyframes menuLinkSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .guides-page {
+        padding: 24px 12px;
+        gap: 24px;
+    }
+
+    .head {
+        padding-right: 8px;
+    }
+
+    .page-title {
+        font-size: 32px;
+        letter-spacing: 8px;
+        -webkit-text-stroke: 5px black;
+        text-stroke: 5px black;
+    }
+
+    .guide-card {
+        height: auto;
+        min-height: 126px;
+        max-height: none;
+    }
+
+    .guide-data {
+        width: auto;
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .head {
+        padding-right: 12px;
+    }
+
+    .page-title {
+        font-size: 28px;
+        letter-spacing: 6px;
+        -webkit-text-stroke: 4px black;
+        text-stroke: 4px black;
+    }
+
+    .guide-card {
+        padding: 12px 24px;
+        gap: 12px;
+    }
+
+    .guide-data {
+        width: 100%;
+    }
+
+    .guide-number {
+        font-size: 26px;
+    }
+
+    .guide-title {
+        font-size: 18px;
+    }
+
+    /* Menu overlay responsive */
+    .menu-content {
+        gap: 150px;
+    }
+
+    .menu-link {
+        font-size: 32px;
+        letter-spacing: 8px;
+        -webkit-text-stroke: 5px black;
+        text-stroke: 5px black;
+    }
+
+    .close-button {
+        width: 44px;
+        height: 44px;
+    }
+
+    .close-line {
+        width: 2.5px;
+        height: 26px;
+    }
+
+    .menu-button {
+        width: 28px;
+        height: 28px;
+    }
+
+    .menu-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
