@@ -105,6 +105,107 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'contents.html';
     });
 
+    // Audio player functionality
+    const audioCards = document.querySelectorAll('.audio-card');
+
+    audioCards.forEach(card => {
+        const audio = card.querySelector('.audio-element');
+        const playButton = card.querySelector('.audio-play-button');
+        const playIcon = card.querySelector('.audio-play-icon');
+        const rewindButton = card.querySelector('.audio-rewind-button');
+        const forwardButton = card.querySelector('.audio-forward-button');
+        const timeStart = card.querySelector('.audio-time-start');
+        const timeEnd = card.querySelector('.audio-time-end');
+        const timelineWrapper = card.querySelector('.audio-timeline-wrapper');
+        const timelineProgress = card.querySelector('.audio-timeline-progress');
+        const timelineHandle = card.querySelector('.audio-timeline-handle');
+
+        // Format time helper
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Update time display
+        function updateTimeDisplay() {
+            timeStart.textContent = formatTime(audio.currentTime);
+            timeEnd.textContent = formatTime(audio.duration || 0);
+        }
+
+        // Update timeline
+        function updateTimeline() {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                timelineProgress.style.width = `${progress}%`;
+                timelineHandle.style.left = `${progress}%`;
+            }
+        }
+
+        // Play/Pause toggle
+        playButton.addEventListener('click', () => {
+            if (audio.paused) {
+                // Pause all other audio players
+                document.querySelectorAll('.audio-element').forEach(otherAudio => {
+                    if (otherAudio !== audio && !otherAudio.paused) {
+                        otherAudio.pause();
+                    }
+                });
+
+                audio.play();
+                playIcon.src = 'assets/images/pause-large.svg';
+            } else {
+                audio.pause();
+                playIcon.src = 'assets/images/play-large.svg';
+            }
+        });
+
+        // Rewind 10 seconds
+        rewindButton.addEventListener('click', () => {
+            audio.currentTime = Math.max(0, audio.currentTime - 10);
+        });
+
+        // Forward 10 seconds
+        forwardButton.addEventListener('click', () => {
+            audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+        });
+
+        // Timeline seek
+        timelineWrapper.addEventListener('click', (e) => {
+            const rect = timelineWrapper.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            audio.currentTime = percentage * audio.duration;
+        });
+
+        // Audio event listeners
+        audio.addEventListener('loadedmetadata', () => {
+            updateTimeDisplay();
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            updateTimeDisplay();
+            updateTimeline();
+        });
+
+        audio.addEventListener('ended', () => {
+            playIcon.src = 'assets/images/play-large.svg';
+            audio.currentTime = 0;
+            updateTimeline();
+        });
+
+        audio.addEventListener('pause', () => {
+            playIcon.src = 'assets/images/play-large.svg';
+        });
+
+        audio.addEventListener('play', () => {
+            playIcon.src = 'assets/images/pause-large.svg';
+        });
+
+        // Initialize time display
+        updateTimeDisplay();
+    });
+
     // Step button interactions
     const stepButtons = document.querySelectorAll('.step-button');
 
