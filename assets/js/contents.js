@@ -241,16 +241,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.style.boxShadow = '4px 4px 0px 0px black';
             }, 150);
 
-            // Settle to normal
+            // Settle to normal and navigate
             setTimeout(() => {
                 this.style.transition = 'all 0.3s ease';
                 this.style.transform = '';
                 this.style.boxShadow = '';
                 this.style.overflow = 'visible';
-            }, 400);
 
-            // Example navigation - replace with actual page
-            // window.location.href = `scene.html?id=${sceneNumber}`;
+                // Navigate to scene page
+                if (sceneNumber === 'SCENE 001') {
+                    window.location.href = 'scene001.html';
+                }
+            }, 400);
         });
     });
 

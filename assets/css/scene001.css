@@ -296,7 +296,7 @@ body.loaded {
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .step-button::before {
@@ -310,11 +310,12 @@ body.loaded {
     background-color: rgba(255, 255, 255, 0.3);
     transform: translate(-50%, -50%);
     transition: width 0.6s ease, height 0.6s ease;
+    pointer-events: none;
 }
 
 .step-button:hover::before {
-    width: 800px;
-    height: 800px;
+    width: 200%;
+    height: 200%;
 }
 
 .step-button:hover {
@@ -353,6 +354,99 @@ body.loaded {
     z-index: 1;
 }
 
+/* Copy icon wrapper for prompt buttons */
+.copy-icon-wrapper {
+    background-color: black;
+    border-radius: 5px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    padding: 5.5px;
+}
+
+.copy-icon {
+    width: 100%;
+    height: 100%;
+}
+
+/* Copied notification */
+.copied-notification {
+    position: absolute;
+    top: -48px;
+    right: 10px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    z-index: 100;
+}
+
+.copied-notification.show {
+    animation: copiedSlideIn 0.3s ease-out forwards;
+}
+
+.copied-notification.hide {
+    animation: copiedSlideOut 0.3s ease-out forwards;
+}
+
+.copied-main {
+    background-color: #7fff00;
+    border-radius: 12px;
+    padding: 12px 20px;
+    box-shadow: 3px 3px 0px 0px black;
+    position: relative;
+}
+
+.copied-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: black;
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* Triangle arrow pointing down using CSS */
+/* Shadow triangle */
+.copied-main::before {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 15px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid black;
+    z-index: -1;
+}
+
+/* Main triangle */
+.copied-main::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 12px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #7fff00;
+}
+
+.copied-arrow-wrapper {
+    display: none;
+}
+
+.copied-arrow {
+    display: none;
+}
+
 /* Placeholder content */
 .prompt-placeholder,
 .audio-placeholder {
@@ -373,6 +467,28 @@ body.loaded {
     }
     to {
         opacity: 1;
+    }
+}
+
+@keyframes copiedSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes copiedSlideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
     }
 }
 
@@ -447,5 +563,11 @@ body.loaded {
     .step-arrow {
         width: 20px;
         height: 15.8px;
+    }
+
+    .copy-icon-wrapper {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
     }
 }

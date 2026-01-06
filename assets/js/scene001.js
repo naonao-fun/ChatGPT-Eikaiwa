@@ -110,8 +110,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     stepButtons.forEach((button, index) => {
         button.addEventListener('click', function(e) {
-            const stepNumber = index + 1;
-            console.log(`STEP ${stepNumber} clicked`);
+            const isPromptButton = this.classList.contains('prompt-button');
+            const stepNumber = isPromptButton
+                ? Array.from(document.querySelectorAll('.prompt-button')).indexOf(this) + 1
+                : Array.from(document.querySelectorAll('.step-button:not(.prompt-button)')).indexOf(this) + 1;
+
+            console.log(`STEP ${stepNumber} clicked (${isPromptButton ? 'Prompt' : 'Start'})`);
+
+            // Create ripple container to clip overflow
+            let rippleContainer = this.querySelector('.ripple-container');
+            if (!rippleContainer) {
+                rippleContainer = document.createElement('div');
+                rippleContainer.classList.add('ripple-container');
+                rippleContainer.style.position = 'absolute';
+                rippleContainer.style.inset = '0';
+                rippleContainer.style.borderRadius = '7px';
+                rippleContainer.style.overflow = 'hidden';
+                rippleContainer.style.pointerEvents = 'none';
+                rippleContainer.style.zIndex = '0';
+                this.appendChild(rippleContainer);
+            }
 
             // Create ripple element
             const ripple = document.createElement('span');
@@ -133,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ripple.style.pointerEvents = 'none';
             ripple.style.animation = 'ripple-effect 0.6s ease-out';
 
-            this.appendChild(ripple);
+            rippleContainer.appendChild(ripple);
 
             // Remove ripple after animation
             setTimeout(() => {
@@ -146,8 +164,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.style.transform = 'scale(1)';
             }, 150);
 
-            // Example navigation - replace with actual functionality
-            // window.location.href = `step${stepNumber}.html`;
+            // Handle prompt copy functionality
+            if (isPromptButton) {
+                // TODO: Add actual prompt text to copy
+                const promptText = `STEP ${stepNumber} のプロンプト`;
+                navigator.clipboard.writeText(promptText).then(() => {
+                    console.log('Prompt copied to clipboard');
+
+                    // Show copied notification
+                    const notification = this.querySelector('.copied-notification');
+                    if (notification) {
+                        // Remove any existing animation classes
+                        notification.classList.remove('show', 'hide');
+
+                        // Trigger reflow to restart animation
+                        void notification.offsetWidth;
+
+                        // Show notification
+                        notification.classList.add('show');
+
+                        // Hide after 2 seconds
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                            notification.classList.add('hide');
+
+                            // Remove hide class after animation completes
+                            setTimeout(() => {
+                                notification.classList.remove('hide');
+                            }, 300);
+                        }, 2000);
+                    }
+                }).catch(err => {
+                    console.error('Failed to copy prompt:', err);
+                });
+            } else {
+                // Example navigation for start buttons - replace with actual functionality
+                // window.location.href = `step${stepNumber}.html`;
+            }
         });
     });
 });

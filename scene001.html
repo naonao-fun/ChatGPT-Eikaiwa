@@ -43,9 +43,11 @@
                 </button>
                 <button class="tab" data-tab="prompt">
                     <span class="tab-text">プロンプト</span>
+                    <div class="tab-underline"></div>
                 </button>
                 <button class="tab" data-tab="audio">
                     <span class="tab-text">学習音声</span>
+                    <div class="tab-underline"></div>
                 </button>
             </div>
 
@@ -78,9 +80,57 @@
 
                 <!-- プロンプト Tab -->
                 <div class="tab-content" id="prompt-content">
-                    <div class="prompt-placeholder">
-                        <p>プロンプト内容がここに表示されます</p>
-                    </div>
+                    <button class="step-button prompt-button" data-name="STEP 1_Prompt_Button">
+                        <span class="step-text">
+                            <span class="step-number">STEP 1 </span>
+                            <span class="step-label">プロンプトをコピー</span>
+                        </span>
+                        <div class="copy-icon-wrapper">
+                            <img src="assets/images/copy-icon.svg" alt="Copy" class="copy-icon">
+                        </div>
+                        <div class="copied-notification" data-name="Copied">
+                            <div class="copied-main">
+                                <p class="copied-text">Copied!</p>
+                            </div>
+                            <div class="copied-arrow-wrapper">
+                                <img src="assets/images/copied-arrow.svg" alt="" class="copied-arrow">
+                            </div>
+                        </div>
+                    </button>
+                    <button class="step-button prompt-button" data-name="STEP 2_Prompt_Button">
+                        <span class="step-text">
+                            <span class="step-number">STEP 2 </span>
+                            <span class="step-label">プロンプトをコピー</span>
+                        </span>
+                        <div class="copy-icon-wrapper">
+                            <img src="assets/images/copy-icon.svg" alt="Copy" class="copy-icon">
+                        </div>
+                        <div class="copied-notification" data-name="Copied">
+                            <div class="copied-main">
+                                <p class="copied-text">Copied!</p>
+                            </div>
+                            <div class="copied-arrow-wrapper">
+                                <img src="assets/images/copied-arrow.svg" alt="" class="copied-arrow">
+                            </div>
+                        </div>
+                    </button>
+                    <button class="step-button prompt-button" data-name="STEP 3_Prompt_Button">
+                        <span class="step-text">
+                            <span class="step-number">STEP 3 </span>
+                            <span class="step-label">プロンプトをコピー</span>
+                        </span>
+                        <div class="copy-icon-wrapper">
+                            <img src="assets/images/copy-icon.svg" alt="Copy" class="copy-icon">
+                        </div>
+                        <div class="copied-notification" data-name="Copied">
+                            <div class="copied-main">
+                                <p class="copied-text">Copied!</p>
+                            </div>
+                            <div class="copied-arrow-wrapper">
+                                <img src="assets/images/copied-arrow.svg" alt="" class="copied-arrow">
+                            </div>
+                        </div>
+                    </button>
                 </div>
 
                 <!-- 学習音声 Tab -->
