@@ -17,6 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
 
         // Navigate back to guides page
-        window.location.href = 'guides.html';
+        window.location.href = '../index.html';
     });
 });

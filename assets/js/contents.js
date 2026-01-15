@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         card.innerHTML = `
             <div class="scene-image" data-name="image">
-                <img src="assets/images/${scene.image}" alt="SCENE ${scene.id}">
+                <img src="../assets/images/${scene.image}" alt="SCENE ${scene.id}">
             </div>
             <div class="scene-data" data-name="SCENE Data">
                 <div class="metadata" data-name="metadata">
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Navigate to scene page with ID parameter
                 if (sceneId) {
-                    window.location.href = `scene.html?id=${sceneId}`;
+                    window.location.href = `scene/index.html?id=${sceneId}`;
                 }
             }, 400);
         });

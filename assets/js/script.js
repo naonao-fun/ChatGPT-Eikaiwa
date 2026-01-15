@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Navigate to contents page
         setTimeout(() => {
-            window.location.href = 'contents.html';
+            window.location.href = 'contents/index.html';
         }, 400);
     });
 

@@ -52,7 +52,7 @@ function renderLearningSteps(container, steps) {
                 <span class="step-number">${step.label || `STEP ${idx + 1}`} </span>
                 <span class="step-label">を開始する</span>
             </span>
-            <img src="assets/images/right-arrow.svg" alt="" class="step-arrow">
+            <img src="../../assets/images/right-arrow.svg" alt="" class="step-arrow">
         `;
 
         button.addEventListener("click", () => {
@@ -84,7 +84,7 @@ function renderPromptSteps(container, steps) {
                 <span class="step-label">プロンプトをコピー</span>
             </span>
             <div class="copy-icon-wrapper">
-                <img src="assets/images/copy-icon.svg" alt="Copy" class="copy-icon">
+                <img src="../../assets/images/copy-icon.svg" alt="Copy" class="copy-icon">
             </div>
         `;
 
@@ -96,7 +96,7 @@ function renderPromptSteps(container, steps) {
                 <p class="copied-text">Copied!</p>
             </div>
             <div class="copied-arrow-wrapper">
-                <img src="assets/images/copied-arrow.svg" alt="" class="copied-arrow">
+                <img src="../../assets/images/copied-arrow.svg" alt="" class="copied-arrow">
             </div>
         `;
 
@@ -157,13 +157,13 @@ function renderAudioSteps(container, audioUrl, stepCount = 2) {
             </div>
             <div class="audio-controls">
                 <button class="audio-rewind-button" aria-label="Rewind 10 seconds">
-                    <img src="assets/images/rewind-10.svg" alt="" class="audio-rewind-icon">
+                    <img src="../../assets/images/rewind-10.svg" alt="" class="audio-rewind-icon">
                 </button>
                 <button class="audio-play-button" aria-label="Play">
-                    <img src="assets/images/play-large.svg" alt="" class="audio-play-icon">
+                    <img src="../../assets/images/play-large.svg" alt="" class="audio-play-icon">
                 </button>
                 <button class="audio-forward-button" aria-label="Forward 10 seconds">
-                    <img src="assets/images/forward-10.svg" alt="" class="audio-forward-icon">
+                    <img src="../../assets/images/forward-10.svg" alt="" class="audio-forward-icon">
                 </button>
             </div>
             <audio class="audio-element" preload="metadata">
@@ -224,10 +224,10 @@ function initializeAudioPlayers() {
                     }
                 });
                 audio.play();
-                playIcon.src = 'assets/images/pause-large.svg';
+                playIcon.src = '../../assets/images/pause-large.svg';
             } else {
                 audio.pause();
-                playIcon.src = 'assets/images/play-large.svg';
+                playIcon.src = '../../assets/images/play-large.svg';
             }
         });
 
@@ -307,15 +307,15 @@ function initializeAudioPlayers() {
             updateTimeline();
         });
         audio.addEventListener('ended', () => {
-            playIcon.src = 'assets/images/play-large.svg';
+            playIcon.src = '../../assets/images/play-large.svg';
             audio.currentTime = 0;
             updateTimeline();
         });
         audio.addEventListener('pause', () => {
-            playIcon.src = 'assets/images/play-large.svg';
+            playIcon.src = '../../assets/images/play-large.svg';
         });
         audio.addEventListener('play', () => {
-            playIcon.src = 'assets/images/pause-large.svg';
+            playIcon.src = '../../assets/images/pause-large.svg';
         });
 
         updateTimeDisplay();
@@ -336,7 +336,7 @@ function initializeAudioPlayers() {
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 20px; padding: 20px;">
                     <h1 style="font-size: 24px; color: #333;">シーンが見つかりません</h1>
                     <p style="color: #666;">ID: ${id || "(指定なし)"}</p>
-                    <a href="contents.html" style="color: #7fff00; text-decoration: none; padding: 10px 20px; border: 2px solid black; border-radius: 8px;">Contentsへ戻る</a>
+                    <a href="../index.html" style="color: #7fff00; text-decoration: none; padding: 10px 20px; border: 2px solid black; border-radius: 8px;">Contentsへ戻る</a>
                 </div>
             `;
             return;
@@ -479,7 +479,7 @@ function initializeAudioPlayers() {
         // Back button functionality
         const backButton = document.querySelector('.back-button');
         backButton.addEventListener('click', () => {
-            window.location.href = 'contents.html';
+            window.location.href = '../index.html';
         });
 
         // Trigger animations
