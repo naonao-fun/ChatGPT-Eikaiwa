@@ -352,6 +352,12 @@ function initializeAudioPlayers() {
         document.getElementById('sceneLocation').textContent = scene.place;
         document.getElementById('sceneTitle').textContent = scene.title;
 
+        // Update scene image
+        const sceneImage = document.getElementById('sceneImage');
+        if (sceneImage && scene.image) {
+            sceneImage.src = `../../assets/images/${scene.image}`;
+        }
+
         // Render tabs content
         renderLearningSteps(document.getElementById('start-content'), scene.learningSteps || []);
         renderPromptSteps(document.getElementById('prompt-content'), scene.promptSteps || []);

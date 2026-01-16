@@ -18,7 +18,7 @@ const scenesData = window.SCENES?.map(scene => ({
     level: levelToStars(scene.level),
     location: scene.place,
     title: scene.title,
-    image: "scene-image.png"
+    image: scene.image
 })) || [];
 
 document.addEventListener('DOMContentLoaded', () => {
