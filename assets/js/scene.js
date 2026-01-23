@@ -129,22 +129,21 @@ function renderPromptSteps(container, steps) {
 }
 
 // Render audio players for 見本音声 tab
-function renderAudioSteps(container, audioUrl, stepCount = 2) {
+function renderAudioSteps(container, sampleAudios) {
     container.innerHTML = "";
 
-    if (!audioUrl) {
+    if (!sampleAudios || sampleAudios.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: #686868;">音声データがありません</p>';
         return;
     }
 
-    for (let i = 1; i <= stepCount; i++) {
+    sampleAudios.forEach((audio, idx) => {
         const audioCard = document.createElement("div");
         audioCard.className = "audio-card";
-        audioCard.setAttribute("data-audio-step", i);
+        audioCard.setAttribute("data-audio-step", idx + 1);
         audioCard.innerHTML = `
             <div class="audio-label">
-                <span class="audio-step-number">STEP ${i} </span>
-                <span class="audio-step-text">見本音声</span>
+                <span class="audio-step-number">${audio.title.replace('_', ' ')}</span>
             </div>
             <div class="audio-timeline-section">
                 <span class="audio-time-start">0:00</span>
@@ -167,12 +166,12 @@ function renderAudioSteps(container, audioUrl, stepCount = 2) {
                 </button>
             </div>
             <audio class="audio-element" preload="metadata">
-                <source src="${audioUrl}" type="audio/mpeg">
+                <source src="${audio.url}" type="audio/mpeg">
             </audio>
         `;
 
         container.appendChild(audioCard);
-    }
+    });
 
     // Initialize audio players
     initializeAudioPlayers();
@@ -361,7 +360,7 @@ function initializeAudioPlayers() {
         // Render tabs content
         renderLearningSteps(document.getElementById('start-content'), scene.learningSteps || []);
         renderPromptSteps(document.getElementById('prompt-content'), scene.promptSteps || []);
-        renderAudioSteps(document.getElementById('audio-content'), scene.sampleAudioUrl);
+        renderAudioSteps(document.getElementById('audio-content'), scene.sampleAudios);
 
         // Tab switching functionality (from scene001.js)
         const tabs = document.querySelectorAll('.tab');

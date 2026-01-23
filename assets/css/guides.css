@@ -361,6 +361,10 @@ body.loaded {
     animation-delay: 0.3s;
 }
 
+.menu-overlay.active .menu-link:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
 .menu-link:hover {
     transform: scale(1.05);
     text-shadow: 0 0 20px rgba(127, 255, 0, 0.5);
