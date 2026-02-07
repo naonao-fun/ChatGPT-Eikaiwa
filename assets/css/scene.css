@@ -1186,7 +1186,12 @@ body.loaded {
     }
 
     .popup-chatgpt-link {
-        font-size: 26px;
+        font-size: 28px;
+    }
+
+    .popup-external-icon {
+        width: 22px;
+        height: 22px;
     }
 
     .popup-card {
