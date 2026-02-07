@@ -435,6 +435,14 @@ function showChatGPTPopup() {
 
     cancelBtn.addEventListener('click', handleCancel);
     overlay.addEventListener('click', handleOverlayClick);
+
+    // Close popup when ChatGPT link is clicked
+    const chatgptLink = document.getElementById('popupChatGPTLink');
+    if (chatgptLink) {
+        chatgptLink.addEventListener('click', () => {
+            handleCancel();
+        });
+    }
 }
 
 // Main initialization
