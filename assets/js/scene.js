@@ -107,6 +107,10 @@ function renderLearningSteps(container, steps) {
                 copyToClipboard(text).catch(err => console.error('Copy failed:', err));
             }
 
+            // Open blank tab NOW during user gesture to avoid popup blockers.
+            // Do NOT use 'noopener' — it makes the returned reference null.
+            popupOpenedWindow = window.open('about:blank', '_blank');
+
             showChatGPTPopup();
         });
 
@@ -371,6 +375,7 @@ function initializeAudioPlayers() {
 // Popup countdown state
 let popupTimer = null;
 let popupPhaseTimeout = null;
+let popupOpenedWindow = null;
 
 // Show ChatGPT popup with 2-phase display
 function showChatGPTPopup() {
@@ -418,14 +423,13 @@ function showChatGPTPopup() {
                 clearInterval(popupTimer);
                 popupTimer = null;
                 overlay.classList.remove('active');
-                // Open ChatGPT in a new tab via <a> click (avoids popup blockers)
-                const a = document.createElement('a');
-                a.href = 'https://chatgpt.com/';
-                a.target = '_blank';
-                a.rel = 'noopener';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                if (popupOpenedWindow && !popupOpenedWindow.closed) {
+                    popupOpenedWindow.location.href = 'https://chatgpt.com/';
+                } else {
+                    // Fallback if the pre-opened tab was blocked or closed
+                    window.location.href = 'https://chatgpt.com/';
+                }
+                popupOpenedWindow = null;
             }
         }, 900);
     }, 2000);
@@ -441,6 +445,10 @@ function showChatGPTPopup() {
             popupTimer = null;
         }
         overlay.classList.remove('active');
+        if (popupOpenedWindow && !popupOpenedWindow.closed) {
+            popupOpenedWindow.close();
+        }
+        popupOpenedWindow = null;
         cancelBtn.removeEventListener('click', handleCancel);
         overlay.removeEventListener('click', handleOverlayClick);
     }
