@@ -107,10 +107,6 @@ function renderLearningSteps(container, steps) {
                 copyToClipboard(text).catch(err => console.error('Copy failed:', err));
             }
 
-            // Open blank tab NOW during user gesture to avoid popup blockers.
-            // Do NOT use 'noopener' — it makes the returned reference null.
-            popupOpenedWindow = window.open('about:blank', '_blank');
-
             showChatGPTPopup();
         });
 
@@ -372,17 +368,15 @@ function initializeAudioPlayers() {
     });
 }
 
-// Popup countdown state
-let popupTimer = null;
+// Popup state
 let popupPhaseTimeout = null;
-let popupOpenedWindow = null;
+let popupDotInterval = null;
 
 // Show ChatGPT popup with 2-phase display
 function showChatGPTPopup() {
     const overlay = document.getElementById('popupOverlay');
     const phase1 = document.getElementById('popupPhase1');
     const phase2 = document.getElementById('popupPhase2');
-    const countdownEl = document.getElementById('popupCountdown');
     const cancelBtn = document.getElementById('popupCancel');
     const dots = document.querySelectorAll('.popup-dot');
     const video = overlay.querySelector('.popup-screenshot-img');
@@ -391,8 +385,6 @@ function showChatGPTPopup() {
     phase1.classList.add('active');
     phase2.classList.remove('active');
     dots.forEach((dot) => dot.classList.remove('active'));
-    let count = 4;
-    countdownEl.textContent = count;
 
     // Show overlay
     overlay.classList.add('active');
@@ -408,47 +400,29 @@ function showChatGPTPopup() {
             video.play();
         }
 
-        // Start countdown: 4→3→2→1→0→navigate
-        popupTimer = setInterval(() => {
-            count--;
-            countdownEl.textContent = count;
-
-            // Activate progress dots (5 dots over 4 seconds)
-            const elapsed = 4 - count;
+        // Animate progress dots sequentially
+        let dotIndex = 0;
+        dots.forEach((dot) => dot.classList.add('active'));
+        popupDotInterval = setInterval(() => {
+            dots.forEach((dot) => dot.classList.remove('active'));
             dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i < Math.ceil((elapsed / 4) * 5));
+                dot.classList.toggle('active', i <= dotIndex);
             });
-
-            if (count <= 0) {
-                clearInterval(popupTimer);
-                popupTimer = null;
-                overlay.classList.remove('active');
-                if (popupOpenedWindow && !popupOpenedWindow.closed) {
-                    popupOpenedWindow.location.href = 'https://chatgpt.com/';
-                } else {
-                    // Fallback if the pre-opened tab was blocked or closed
-                    window.location.href = 'https://chatgpt.com/';
-                }
-                popupOpenedWindow = null;
-            }
-        }, 900);
+            dotIndex = (dotIndex + 1) % dots.length;
+        }, 600);
     }, 2000);
 
-    // Cancel handler
+    // Cancel/close handler
     function handleCancel() {
         if (popupPhaseTimeout) {
             clearTimeout(popupPhaseTimeout);
             popupPhaseTimeout = null;
         }
-        if (popupTimer) {
-            clearInterval(popupTimer);
-            popupTimer = null;
+        if (popupDotInterval) {
+            clearInterval(popupDotInterval);
+            popupDotInterval = null;
         }
         overlay.classList.remove('active');
-        if (popupOpenedWindow && !popupOpenedWindow.closed) {
-            popupOpenedWindow.close();
-        }
-        popupOpenedWindow = null;
         cancelBtn.removeEventListener('click', handleCancel);
         overlay.removeEventListener('click', handleOverlayClick);
     }

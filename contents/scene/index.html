@@ -74,12 +74,12 @@
     <!-- Popup Overlay -->
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup-container">
-            <button class="popup-cancel-button" id="popupCancel">
+            <button class="popup-close-button" id="popupCancel">
                 <svg width="21" height="21" viewBox="0 0 21 21" fill="none">
                     <path d="M15.625 5.25L5.25 15.625" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M5.25 5.25L15.625 15.625" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span class="popup-cancel-text">中断する</span>
+                <span class="popup-close-text">閉じる</span>
             </button>
             <div class="popup-card">
                 <!-- Phase 1: コピー完了表示 -->
@@ -115,17 +115,23 @@
                         <p class="popup-copy-message">プロンプトを<br>コピーしました！</p>
                     </div>
                 </div>
-                <!-- Phase 2: カウントダウン + 動画 -->
+                <!-- Phase 2: 動画 + ChatGPTリンク -->
                 <div class="popup-phase popup-phase-2" id="popupPhase2">
                     <div class="popup-screenshot-section">
                         <div class="popup-screenshot-wrapper">
                             <video src="../../assets/images/guide.mp4" class="popup-screenshot-img" muted loop playsinline></video>
                         </div>
                     </div>
-                    <div class="popup-countdown-section">
-                        <p class="popup-countdown-text">
-                            あと <span class="popup-countdown-number" id="popupCountdown">4</span>秒 で<br>ChatGPTへ移動します
-                        </p>
+                    <div class="popup-link-section">
+                        <div class="popup-link-row">
+                            <a href="https://chatgpt.com/" target="_blank" rel="noopener" class="popup-chatgpt-link" id="popupChatGPTLink">
+                                ChatGPTへ移動
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="popup-external-icon">
+                                    <path d="M15.833 10.833v5a1.667 1.667 0 0 1-1.666 1.667H4.167A1.667 1.667 0 0 1 2.5 15.833V5.833A1.667 1.667 0 0 1 4.167 4.167h5M12.5 2.5h5v5M8.333 11.667 17.5 2.5" stroke="#0060F0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <p class="popup-sub-text">学習を始めましょう！</p>
                         <div class="popup-progress-dots" id="popupProgressDots">
                             <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
