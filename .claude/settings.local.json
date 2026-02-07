@@ -1,14 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(claude mcp add:*)",
-      "Bash(npm install:*)",
-      "Bash(curl:*)",
-      "Bash(npm run build:*)",
-      "Bash(tree:*)",
-      "Bash(ls:*)",
+      "Bash(git -C /Users/yugawanaoki/Desktop/ChatGPT-Eikaiwa log --oneline)",
       "mcp__figma-desktop__get_design_context",
-      "mcp__figma-desktop__get_screenshot"
+      "mcp__figma-desktop__get_screenshot",
+      "Bash(ls:*)"
     ]
   }
 }

@@ -18,10 +18,60 @@ function stars(level) {
     return starMap[level] || "★☆☆☆";
 }
 
-// Copy text to clipboard
+// Copy text to clipboard (fallback for non-secure contexts or gesture loss)
 function copyToClipboard(text) {
     if (!text) return Promise.reject();
-    return navigator.clipboard.writeText(text);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text).catch(() => copyFallback(text));
+    }
+    return copyFallback(text);
+}
+
+// Fallback copy using execCommand for environments where Clipboard API fails
+function copyFallback(text) {
+    return new Promise((resolve, reject) => {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        textarea.style.top = '-9999px';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+            const ok = document.execCommand('copy');
+            document.body.removeChild(textarea);
+            ok ? resolve() : reject(new Error('execCommand copy failed'));
+        } catch (e) {
+            document.body.removeChild(textarea);
+            reject(e);
+        }
+    });
+}
+
+// Load prompt text from file (works on both http and file:// protocols)
+function loadPromptText(url) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onload = function () {
+            if (xhr.status === 200 || xhr.status === 0) {
+                // status 0 is normal for file:// protocol
+                if (xhr.responseText) {
+                    resolve(xhr.responseText);
+                } else {
+                    reject(new Error('Empty response'));
+                }
+            } else {
+                reject(new Error('HTTP ' + xhr.status));
+            }
+        };
+        xhr.onerror = function () {
+            reject(new Error('XHR failed'));
+        };
+        xhr.send();
+    });
 }
 
 // Add touch effect to step button
@@ -56,11 +106,14 @@ function renderLearningSteps(container, steps) {
         `;
 
         button.addEventListener("click", () => {
-            // Copy prompt and open ChatGPT
-            if (step.prompt) {
-                copyToClipboard(step.prompt).catch(err => console.error('Failed to copy:', err));
-            }
-            window.open("https://chatgpt.com/", "_blank", "noopener");
+            const sceneId = getSceneId();
+            const stepNum = idx + 1;
+            const promptUrl = `../../assets/prompts/SCENE${sceneId}-STEP${stepNum}.txt`;
+
+            loadPromptText(promptUrl)
+                .then(text => copyToClipboard(text))
+                .catch(err => console.error('Failed to load/copy prompt:', err))
+                .finally(() => showChatGPTPopup());
         });
 
         addTouchEffect(button);
@@ -319,6 +372,86 @@ function initializeAudioPlayers() {
 
         updateTimeDisplay();
     });
+}
+
+// Popup countdown state
+let popupTimer = null;
+let popupPhaseTimeout = null;
+
+// Show ChatGPT popup with 2-phase display
+function showChatGPTPopup() {
+    const overlay = document.getElementById('popupOverlay');
+    const phase1 = document.getElementById('popupPhase1');
+    const phase2 = document.getElementById('popupPhase2');
+    const countdownEl = document.getElementById('popupCountdown');
+    const cancelBtn = document.getElementById('popupCancel');
+    const dots = document.querySelectorAll('.popup-dot');
+    const video = overlay.querySelector('.popup-screenshot-img');
+
+    // Reset to phase 1
+    phase1.classList.add('active');
+    phase2.classList.remove('active');
+    dots.forEach((dot) => dot.classList.remove('active'));
+    let count = 4;
+    countdownEl.textContent = count;
+
+    // Show overlay
+    overlay.classList.add('active');
+
+    // Phase 1 → Phase 2 transition after 2.5 seconds
+    popupPhaseTimeout = setTimeout(() => {
+        phase1.classList.remove('active');
+        phase2.classList.add('active');
+
+        // Start video from beginning
+        if (video && video.tagName === 'VIDEO') {
+            video.currentTime = 0;
+            video.play();
+        }
+
+        // Start countdown: 4→3→2→1→0→navigate
+        popupTimer = setInterval(() => {
+            count--;
+            countdownEl.textContent = count;
+
+            // Activate progress dots (5 dots over 4 seconds)
+            const elapsed = 4 - count;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i < Math.ceil((elapsed / 4) * 5));
+            });
+
+            if (count <= 0) {
+                clearInterval(popupTimer);
+                popupTimer = null;
+                overlay.classList.remove('active');
+                window.open("https://chatgpt.com/", "_blank", "noopener");
+            }
+        }, 900);
+    }, 2000);
+
+    // Cancel handler
+    function handleCancel() {
+        if (popupPhaseTimeout) {
+            clearTimeout(popupPhaseTimeout);
+            popupPhaseTimeout = null;
+        }
+        if (popupTimer) {
+            clearInterval(popupTimer);
+            popupTimer = null;
+        }
+        overlay.classList.remove('active');
+        cancelBtn.removeEventListener('click', handleCancel);
+        overlay.removeEventListener('click', handleOverlayClick);
+    }
+
+    function handleOverlayClick(e) {
+        if (e.target === overlay) {
+            handleCancel();
+        }
+    }
+
+    cancelBtn.addEventListener('click', handleCancel);
+    overlay.addEventListener('click', handleOverlayClick);
 }
 
 // Main initialization

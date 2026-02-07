@@ -71,6 +71,74 @@
             </div>
         </div>
     </div>
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-container">
+            <button class="popup-cancel-button" id="popupCancel">
+                <svg width="21" height="21" viewBox="0 0 21 21" fill="none">
+                    <path d="M15.625 5.25L5.25 15.625" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5.25 5.25L15.625 15.625" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="popup-cancel-text">中断する</span>
+            </button>
+            <div class="popup-card">
+                <!-- Phase 1: コピー完了表示 -->
+                <div class="popup-phase popup-phase-1 active" id="popupPhase1">
+                    <div class="popup-icon-section">
+                        <div class="popup-clipboard-icon">
+                            <svg width="94" height="94" viewBox="0 0 94 94" fill="none">
+                                <path d="M61.625 20.5C67.1258 20.5 69.8762 20.5 71.852 21.8202C72.7073 22.3917 73.4417 23.126 74.0132 23.9814C75.3333 25.9571 75.3333 28.7075 75.3333 34.2083V71.4167C75.3333 78.802 75.3333 82.4947 73.039 84.789C70.7447 87.0833 67.052 87.0833 59.6667 87.0833H36.1667C28.7813 87.0833 25.0887 87.0833 22.7943 84.789C20.5 82.4947 20.5 78.802 20.5 71.4167V34.2083C20.5 28.7075 20.5 25.9571 21.8202 23.9814C22.3917 23.126 23.126 22.3917 23.9814 21.8202C25.9571 20.5 28.7075 20.5 34.2083 20.5" stroke="black" stroke-width="3"/>
+                                <rect x="36.5" y="12.5" width="23" height="15.6667" rx="7.83333" stroke="black" stroke-width="3" fill="none"/>
+                                <path d="M36.5 48.5H57" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                                <path d="M36.5 63.5H53.1667" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                            <div class="popup-badge">
+                                <svg class="badge-svg" width="55" height="53" viewBox="0 0 55 53" fill="none">
+                                    <g class="badge-star" filter="url(#badge_shadow)">
+                                        <path d="M53 25.5L47.1218 18.7243L47.9409 9.76286L39.2441 7.77143L34.6909 0L26.5 3.54571L18.3091 0L13.7559 7.74714L5.05909 9.71429L5.87818 18.7L0 25.5L5.87818 32.2757L5.05909 41.2614L13.7559 43.2529L18.3091 51L26.5 47.43L34.6909 50.9757L39.2441 43.2286L47.9409 41.2371L47.1218 32.2757L53 25.5Z" fill="#7FFF00"/>
+                                    </g>
+                                    <path class="badge-check" d="M16 27.8182L23.0924 33.3983C23.5181 33.7332 24.1331 33.6684 24.4795 33.252L38 17" stroke="black" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                    <defs>
+                                        <filter id="badge_shadow" x="0" y="0" width="55" height="53" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                            <feOffset dx="2" dy="2"/>
+                                            <feComposite in2="hardAlpha" operator="out"/>
+                                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"/>
+                                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1"/>
+                                            <feBlend mode="normal" in="SourceGraphic" in2="effect1" result="shape"/>
+                                        </filter>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="popup-copy-message">プロンプトを<br>コピーしました！</p>
+                    </div>
+                </div>
+                <!-- Phase 2: カウントダウン + 動画 -->
+                <div class="popup-phase popup-phase-2" id="popupPhase2">
+                    <div class="popup-screenshot-section">
+                        <div class="popup-screenshot-wrapper">
+                            <video src="../../assets/images/guide.mp4" class="popup-screenshot-img" muted loop playsinline></video>
+                        </div>
+                    </div>
+                    <div class="popup-countdown-section">
+                        <p class="popup-countdown-text">
+                            あと <span class="popup-countdown-number" id="popupCountdown">4</span>秒 で<br>ChatGPTへ移動します
+                        </p>
+                        <div class="popup-progress-dots" id="popupProgressDots">
+                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../../assets/js/scenes-data.js"></script>
     <script src="../../assets/js/scene.js"></script>
 </body>
