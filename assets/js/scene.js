@@ -483,7 +483,7 @@ function showChatGPTPopup() {
 
         // Render tabs content
         renderLearningSteps(document.getElementById('start-content'), scene.learningSteps || []);
-        renderPromptSteps(document.getElementById('prompt-content'), scene.promptSteps || []);
+        // renderPromptSteps removed - プロンプトタブは廃止
         renderAudioSteps(document.getElementById('audio-content'), scene.sampleAudios);
 
         // Tab switching functionality (from scene001.js)
@@ -549,7 +549,7 @@ function showChatGPTPopup() {
         let touchEndX = 0;
         let tabSwipeBlocked = false;
         const minSwipeDistance = 50;
-        const tabOrder = ['start', 'prompt', 'audio'];
+        const tabOrder = ['start', 'audio'];
 
         tabContentWrapper.addEventListener('touchstart', (e) => {
             // Block tab swipe if starting on audio timeline
