@@ -753,7 +753,7 @@ body.loaded {
     display: none;
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.65);
     z-index: 1000;
     align-items: center;
     justify-content: center;
