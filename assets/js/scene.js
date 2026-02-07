@@ -50,28 +50,19 @@ function copyFallback(text) {
     });
 }
 
-// Load prompt text from file (works on both http and file:// protocols)
-function loadPromptText(url) {
-    return new Promise((resolve, reject) => {
+// Load prompt text from file synchronously (keeps user gesture context alive for clipboard)
+function loadPromptTextSync(url) {
+    try {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onload = function () {
-            if (xhr.status === 200 || xhr.status === 0) {
-                // status 0 is normal for file:// protocol
-                if (xhr.responseText) {
-                    resolve(xhr.responseText);
-                } else {
-                    reject(new Error('Empty response'));
-                }
-            } else {
-                reject(new Error('HTTP ' + xhr.status));
-            }
-        };
-        xhr.onerror = function () {
-            reject(new Error('XHR failed'));
-        };
+        xhr.open('GET', url, false); // synchronous
         xhr.send();
-    });
+        if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText) {
+            return xhr.responseText;
+        }
+    } catch (e) {
+        console.error('Failed to load prompt:', e);
+    }
+    return null;
 }
 
 // Add touch effect to step button
@@ -110,10 +101,13 @@ function renderLearningSteps(container, steps) {
             const stepNum = idx + 1;
             const promptUrl = `../../assets/prompts/SCENE${sceneId}-STEP${stepNum}.txt`;
 
-            loadPromptText(promptUrl)
-                .then(text => copyToClipboard(text))
-                .catch(err => console.error('Failed to load/copy prompt:', err))
-                .finally(() => showChatGPTPopup());
+            // Load synchronously to keep user gesture context for clipboard access
+            const text = loadPromptTextSync(promptUrl);
+            if (text) {
+                copyToClipboard(text).catch(err => console.error('Copy failed:', err));
+            }
+
+            showChatGPTPopup();
         });
 
         addTouchEffect(button);
@@ -398,7 +392,7 @@ function showChatGPTPopup() {
     // Show overlay
     overlay.classList.add('active');
 
-    // Phase 1 → Phase 2 transition after 2.5 seconds
+    // Phase 1 → Phase 2 transition after 2 seconds
     popupPhaseTimeout = setTimeout(() => {
         phase1.classList.remove('active');
         phase2.classList.add('active');
@@ -424,7 +418,14 @@ function showChatGPTPopup() {
                 clearInterval(popupTimer);
                 popupTimer = null;
                 overlay.classList.remove('active');
-                window.open("https://chatgpt.com/", "_blank", "noopener");
+                // Open ChatGPT in a new tab via <a> click (avoids popup blockers)
+                const a = document.createElement('a');
+                a.href = 'https://chatgpt.com/';
+                a.target = '_blank';
+                a.rel = 'noopener';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
             }
         }, 900);
     }, 2000);
