@@ -389,6 +389,11 @@ function showChatGPTPopup() {
     // Show overlay
     overlay.classList.add('active');
 
+    // Haptic feedback for copy confirmation
+    if (navigator.vibrate) {
+        navigator.vibrate([15, 50, 15]);
+    }
+
     // Phase 1 → Phase 2 transition after 2 seconds
     popupPhaseTimeout = setTimeout(() => {
         phase1.classList.remove('active');
