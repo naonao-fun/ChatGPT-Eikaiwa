@@ -1,5 +1,5 @@
 ==================================================
-Scene 001｜機内食を頼む｜難易度：★｜用途：STEP2 ロールプレイ音読
+Scene 001｜機内食を頼む｜難易度：★☆☆☆｜用途：STEP2 ロールプレイ音読
 ==================================================
 
 【出力制御ルール】
@@ -33,7 +33,7 @@ AIは客室業務員（CA）役、あなたは乗客（Passenger）役です。
 2) Passenger: Let’s see. Pasta, please.
 3) CA: Would you like something to drink?
 4) Passenger: What kinds of drinks do you have?
-5) CA: We have water, orange juice, iced coffee and tea.
+5) CA: We have water, orange juice, coffee and tea.
 6) Passenger: Can I have a cup of iced coffee?
 7) CA: Sure. Anything else?
 8) Passenger: That’s all, thanks.
