@@ -1170,13 +1170,13 @@ body.loaded {
     border: 2px solid black;
     border-radius: 7px;
     box-shadow: 3px 3px 0px 0px black;
-    height: 58px;
+    height: 66px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 24px;
-    padding: 15px 32px 15px 42px;
+    padding: 17px 32px 17px 42px;
     cursor: pointer;
     text-decoration: none;
     transition: all 0.2s ease;
@@ -1187,7 +1187,7 @@ body.loaded {
 .popup-chatgpt-button span {
     font-family: 'Roboto', 'Noto Sans JP', sans-serif;
     font-weight: 600;
-    font-size: 23px;
+    font-size: 26px;
     color: black;
     white-space: nowrap;
 }
@@ -1325,13 +1325,13 @@ body.loaded {
     }
 
     .popup-chatgpt-button {
-        height: 52px;
-        padding: 12px 24px 12px 32px;
+        height: 58px;
+        padding: 14px 24px 14px 32px;
         gap: 16px;
     }
 
     .popup-chatgpt-button span {
-        font-size: 20px;
+        font-size: 23px;
     }
 
     .popup-link-section {
