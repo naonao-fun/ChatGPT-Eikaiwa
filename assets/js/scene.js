@@ -371,7 +371,92 @@ function initializeAudioPlayers() {
 
 // Popup state
 let popupPhaseTimeout = null;
-let popupDotInterval = null;
+let slideshowInterval = null;
+let currentSlideIndex = 0;
+let subTextInterval = null;
+let subTextIndex = 0;
+
+// Sub-text rotation
+const subTextMessages = [
+    'さあ、学習を始めましょう！',
+    '使用するAIアプリに移動してください',
+    'Progress, not perfection.',
+    'Keep going.',
+    'Mistakes are proof you\'re trying.',
+    'Rome wasn\'t built in a day.',
+];
+
+function startSubTextRotation() {
+    stopSubTextRotation();
+    subTextIndex = 0;
+    const el = document.querySelector('.popup-sub-text');
+    if (!el) return;
+    el.textContent = subTextMessages[0];
+    el.style.opacity = '1';
+
+    subTextInterval = setInterval(() => {
+        subTextIndex++;
+        let nextMsg;
+        if (subTextIndex === 1) {
+            // 2nd message is always the second fixed one
+            nextMsg = subTextMessages[1];
+        } else {
+            // 3rd onwards: pick randomly, avoiding consecutive duplicates
+            const currentMsg = el.textContent;
+            do {
+                nextMsg = subTextMessages[Math.floor(Math.random() * subTextMessages.length)];
+            } while (nextMsg === currentMsg);
+        }
+        // Fade out, swap text, fade in
+        el.style.transition = 'opacity 0.4s ease';
+        el.style.opacity = '0';
+        setTimeout(() => {
+            el.textContent = nextMsg;
+            el.style.opacity = '1';
+        }, 400);
+    }, 5000);
+}
+
+function stopSubTextRotation() {
+    if (subTextInterval) {
+        clearInterval(subTextInterval);
+        subTextInterval = null;
+    }
+    subTextIndex = 0;
+}
+
+// Slideshow: go to a specific slide
+function goToSlide(index) {
+    const slides = document.querySelectorAll('.popup-slide');
+    const dots = document.querySelectorAll('.popup-slide-dot');
+    if (!slides.length) return;
+
+    currentSlideIndex = index % slides.length;
+
+    slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === currentSlideIndex);
+    });
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlideIndex);
+    });
+}
+
+// Slideshow: start auto-play
+function startSlideshow() {
+    stopSlideshow();
+    goToSlide(0);
+    slideshowInterval = setInterval(() => {
+        goToSlide(currentSlideIndex + 1);
+    }, 3500);
+}
+
+// Slideshow: stop auto-play
+function stopSlideshow() {
+    if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+    }
+}
 
 // Show ChatGPT popup with 2-phase display
 function showChatGPTPopup(sceneId, stepNum) {
@@ -379,8 +464,6 @@ function showChatGPTPopup(sceneId, stepNum) {
     const phase1 = document.getElementById('popupPhase1');
     const phase2 = document.getElementById('popupPhase2');
     const cancelBtn = document.getElementById('popupCancel');
-    const dots = document.querySelectorAll('.popup-dot');
-    const video = overlay.querySelector('.popup-screenshot-img');
     const sceneStepTag = document.getElementById('popupSceneStepTag');
 
     // Update SCENE/STEP tag
@@ -391,7 +474,6 @@ function showChatGPTPopup(sceneId, stepNum) {
     // Reset to phase 1
     phase1.classList.add('active');
     phase2.classList.remove('active');
-    dots.forEach((dot) => dot.classList.remove('active'));
 
     // Show overlay
     overlay.classList.add('active');
@@ -406,22 +488,17 @@ function showChatGPTPopup(sceneId, stepNum) {
         phase1.classList.remove('active');
         phase2.classList.add('active');
 
-        // Start video from beginning
-        if (video && video.tagName === 'VIDEO') {
-            video.currentTime = 0;
-            video.play();
+        // Animate first slide badge
+        const firstBadge = document.querySelector('.popup-slide.active .popup-slide-badge');
+        if (firstBadge) {
+            firstBadge.classList.add('badge-animate');
         }
 
-        // Animate progress dots sequentially
-        let dotIndex = 0;
-        dots.forEach((dot) => dot.classList.add('active'));
-        popupDotInterval = setInterval(() => {
-            dots.forEach((dot) => dot.classList.remove('active'));
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i <= dotIndex);
-            });
-            dotIndex = (dotIndex + 1) % dots.length;
-        }, 600);
+        // Start slideshow
+        startSlideshow();
+
+        // Start sub-text rotation
+        startSubTextRotation();
     }, 2000);
 
     // Cancel/close handler
@@ -430,10 +507,10 @@ function showChatGPTPopup(sceneId, stepNum) {
             clearTimeout(popupPhaseTimeout);
             popupPhaseTimeout = null;
         }
-        if (popupDotInterval) {
-            clearInterval(popupDotInterval);
-            popupDotInterval = null;
-        }
+        stopSlideshow();
+        stopSubTextRotation();
+        // Reset badge animation
+        document.querySelectorAll('.popup-slide-badge.badge-animate').forEach(b => b.classList.remove('badge-animate'));
         overlay.classList.remove('active');
         cancelBtn.removeEventListener('click', handleCancel);
         overlay.removeEventListener('click', handleOverlayClick);
@@ -454,6 +531,54 @@ function showChatGPTPopup(sceneId, stepNum) {
         chatgptLink.addEventListener('click', () => {
             handleCancel();
         });
+    }
+
+    // Slide dot click navigation
+    const slideDots = document.querySelectorAll('.popup-slide-dot');
+    slideDots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+            const dotIndex = parseInt(dot.getAttribute('data-dot'), 10);
+            goToSlide(dotIndex);
+            // Reset auto-play timer
+            stopSlideshow();
+            slideshowInterval = setInterval(() => {
+                goToSlide(currentSlideIndex + 1);
+            }, 3500);
+        });
+    });
+
+    // Swipe support for slideshow
+    const viewport = document.querySelector('.popup-slides-viewport');
+    if (viewport) {
+        let swStartX = 0;
+        let swStartY = 0;
+
+        viewport.addEventListener('touchstart', (e) => {
+            swStartX = e.changedTouches[0].screenX;
+            swStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        viewport.addEventListener('touchend', (e) => {
+            const swEndX = e.changedTouches[0].screenX;
+            const swEndY = e.changedTouches[0].screenY;
+            const dx = swEndX - swStartX;
+            const dy = swEndY - swStartY;
+
+            // Only horizontal swipes (ignore vertical)
+            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+                // Stop auto-play BEFORE changing slide to prevent double advance
+                stopSlideshow();
+                if (dx < 0 && currentSlideIndex < 3) {
+                    goToSlide(currentSlideIndex + 1);
+                } else if (dx > 0 && currentSlideIndex > 0) {
+                    goToSlide(currentSlideIndex - 1);
+                }
+                // Restart auto-play timer
+                slideshowInterval = setInterval(() => {
+                    goToSlide(currentSlideIndex + 1);
+                }, 3500);
+            }
+        }, { passive: true });
     }
 }
 

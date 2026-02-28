@@ -101,30 +101,58 @@
                         <p class="popup-copy-message">プロンプトを<br>コピーしました！</p>
                     </div>
                 </div>
-                <!-- Phase 2: 動画 + ChatGPTリンク -->
+                <!-- Phase 2: スライドショー + ChatGPTリンク -->
                 <div class="popup-phase popup-phase-2" id="popupPhase2">
-                    <div class="popup-screenshot-section">
-                        <div class="popup-screenshot-wrapper">
-                            <video src="../../assets/images/guide.mp4" class="popup-screenshot-img" muted loop playsinline></video>
+                    <div class="popup-slideshow" id="popupSlideshow">
+                        <div class="popup-slides-viewport">
+                            <!-- Slide 1 -->
+                            <div class="popup-slide active" data-slide="0">
+                                <img src="../../assets/images/guide-slide-1.png" alt="" class="popup-slide-img">
+                                <span class="popup-slide-badge badge-pos-1">①プロンプトをペースト</span>
+                                <div class="popup-slide-hand hand-pos-1">
+                                    <img src="../../assets/images/hand-gesture.svg" alt="" class="popup-hand-svg">
+                                    <img src="../../assets/images/click-indicator.svg" alt="" class="popup-click-svg">
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="popup-slide" data-slide="1">
+                                <img src="../../assets/images/guide-slide-2.png" alt="" class="popup-slide-img">
+                                <span class="popup-slide-badge badge-pos-2">②プロンプトを送信</span>
+                                <div class="popup-slide-hand hand-pos-2">
+                                    <img src="../../assets/images/hand-gesture.svg" alt="" class="popup-hand-svg">
+                                    <img src="../../assets/images/click-indicator.svg" alt="" class="popup-click-svg">
+                                </div>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="popup-slide" data-slide="2">
+                                <img src="../../assets/images/guide-slide-3.png" alt="" class="popup-slide-img">
+                                <span class="popup-slide-badge badge-pos-3">③音声モードに切り替え</span>
+                                <div class="popup-slide-hand hand-pos-3">
+                                    <img src="../../assets/images/hand-gesture.svg" alt="" class="popup-hand-svg">
+                                    <img src="../../assets/images/click-indicator.svg" alt="" class="popup-click-svg">
+                                </div>
+                            </div>
+                            <!-- Slide 4 -->
+                            <div class="popup-slide" data-slide="3">
+                                <img src="../../assets/images/guide-slide-4.png" alt="" class="popup-slide-img">
+                                <span class="popup-slide-badge badge-pos-4">「Let's start.」で開始</span>
+                            </div>
+                        </div>
+                        <div class="popup-slide-dots">
+                            <span class="popup-slide-dot active" data-dot="0"></span>
+                            <span class="popup-slide-dot" data-dot="1"></span>
+                            <span class="popup-slide-dot" data-dot="2"></span>
+                            <span class="popup-slide-dot" data-dot="3"></span>
                         </div>
                     </div>
                     <div class="popup-link-section">
-                        <div class="popup-link-row">
-                            <a href="https://chatgpt.com/?prompt=%20" target="_blank" rel="noopener" class="popup-chatgpt-link" id="popupChatGPTLink">
-                                ChatGPTへ移動
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="popup-external-icon">
-                                    <path d="M15.833 10.833v5a1.667 1.667 0 0 1-1.666 1.667H4.167A1.667 1.667 0 0 1 2.5 15.833V5.833A1.667 1.667 0 0 1 4.167 4.167h5M12.5 2.5h5v5M8.333 11.667 17.5 2.5" stroke="#0060F0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </a>
-                        </div>
-                        <p class="popup-sub-text">さあ始めましょう！</p>
-                        <div class="popup-progress-dots" id="popupProgressDots">
-                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            <svg class="popup-dot" width="14" height="14" viewBox="0 0 11 11" fill="none"><path d="M9.21 4.37L2.73 1.13C1.93 0.73 1 1.31 1 2.2V8.32C1 9.21 1.93 9.79 2.73 9.39L9.21 6.16C9.94 5.79 9.94 4.74 9.21 4.37Z" fill="#7FFF00" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
+                        <a href="https://chatgpt.com/?prompt=%20" target="_blank" rel="noopener" class="popup-chatgpt-button" id="popupChatGPTLink">
+                            <span>ChatGPTへ移動</span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                <path d="M15.833 10.833v5a1.667 1.667 0 0 1-1.666 1.667H4.167A1.667 1.667 0 0 1 2.5 15.833V5.833A1.667 1.667 0 0 1 4.167 4.167h5M12.5 2.5h5v5M8.333 11.667 17.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                        <p class="popup-sub-text">さあ、学習を始めましょう！</p>
                     </div>
                 </div>
             </div>

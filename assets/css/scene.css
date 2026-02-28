@@ -864,8 +864,8 @@ body.loaded {
     color: transparent;
     font-family: 'Roboto', sans-serif;
     font-weight: 900;
-    font-size: 13px;
-    padding: 4px 19px;
+    font-size: 15px;
+    padding: 5px 22px;
     border-radius: 49px;
     white-space: nowrap;
     text-align: center;
@@ -991,133 +991,221 @@ body.loaded {
     margin: 0;
 }
 
-.popup-screenshot-section {
-    position: relative;
-    width: 380px;
-    height: 180px;
+/* ===== Slideshow (Phase 2) ===== */
+.popup-phase-2 {
+    margin-top: -34px;
+    margin-left: -1px;
+    margin-right: -1px;
 }
 
-.popup-screenshot-wrapper {
+.popup-slideshow {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup-slides-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 315 / 170;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+    background: #e0e0e0;
+}
+
+.popup-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.popup-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Phone screenshot image (cropped to show screen content) */
+.popup-slide-img {
+    position: absolute;
+    width: 219%;
+    max-width: none;
+    top: -164%;
+    left: -60%;
+}
+
+/* Step instruction badge */
+.popup-slide-badge {
+    position: absolute;
+    background: white;
+    border: 2px solid #1F64E7;
+    color: #1F64E7;
+    font-family: 'Roboto', 'Noto Sans Symbols 2', 'Noto Sans JP', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    padding: 5px 20px;
+    border-radius: 49px;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+/* Badge entrance animation (first appearance only) */
+.popup-slide-badge.badge-animate {
+    opacity: 0;
+    transform: scaleX(0);
+    color: transparent;
+    animation: badgeFrameIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards,
+               badgeTextIn 0.3s ease 0.65s forwards;
+}
+
+@keyframes badgeFrameIn {
+    0% { opacity: 0; transform: scaleX(0); }
+    100% { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes badgeTextIn {
+    0% { color: transparent; }
+    100% { color: #1F64E7; }
+}
+
+/* Badge positions per slide */
+.badge-pos-1 { top: 15%; left: 4%; }
+.badge-pos-2 { top: 15%; left: 4%; }
+.badge-pos-3 { top: 15%; left: 4%; }
+.badge-pos-4 { top: 15%; left: 4%; }
+
+/* Hand gesture container */
+.popup-slide-hand {
+    position: absolute;
+    z-index: 3;
+    width: 50px;
+    height: 50px;
+    animation: handTap 1.6s ease-in-out infinite;
+}
+
+@keyframes handTap {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+}
+
+/* Hand SVG */
+.popup-hand-svg {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-    position: relative;
+    display: block;
 }
 
-.popup-screenshot-img {
-    width: 100%;
-    height: auto;
+/* Click indicator SVG */
+.popup-click-svg {
     position: absolute;
-    bottom: -10px;
-    left: 0;
+    width: 24px;
+    height: 21px;
+    top: -6px;
+    left: -4px;
+    animation: clickPulse 1.6s ease-in-out infinite;
 }
 
-.popup-speech-bubble {
-    position: absolute;
-    top: 14px;
-    right: -5px;
-    background-color: #7FFF00;
-    border-radius: 8px;
-    padding: 6px 10px;
-    box-shadow: 2px 2px 0px 0px black;
-    z-index: 2;
+@keyframes clickPulse {
+    0%, 100% { opacity: 0; transform: scale(0.8); }
+    15% { opacity: 1; transform: scale(1.2); }
+    40% { opacity: 0; transform: scale(1.5); }
 }
 
-.popup-speech-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -7px;
-    left: 15px;
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-top: 7px solid #7FFF00;
+/* Hand positions per slide */
+.hand-pos-1 { bottom: 24%; left: 32%; }
+.hand-pos-2 { bottom: 16%; right: 18%; }
+.hand-pos-3 { bottom: 16%; right: 18%; }
+
+/* Slide navigation dots */
+.popup-slide-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 0 6px;
 }
 
-.popup-speech-text {
-    font-family: 'Roboto', 'Noto Sans JP', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    color: black;
-    white-space: pre-wrap;
-    text-align: center;
+.popup-slide-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: black;
+    opacity: 0.35;
+    cursor: pointer;
+    transition: opacity 0.3s ease, background 0.3s ease;
 }
 
-.popup-circle-indicator {
-    position: absolute;
-    bottom: 5px;
-    right: 0;
-    width: 26px;
-    height: 26px;
-    z-index: 2;
+.popup-slide-dot.active {
+    background: #7FFF00;
+    opacity: 1;
 }
 
+/* Link section (below slideshow) */
 .popup-link-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 13px;
-    width: 248px;
+    width: 100%;
+    padding: 0 30px;
 }
 
-.popup-link-row {
+/* Green ChatGPT button */
+.popup-chatgpt-button {
+    background-color: #7fff00;
+    border: 2px solid black;
+    border-radius: 7px;
+    box-shadow: 3px 3px 0px 0px black;
+    height: 50px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 24px;
+    padding: 13px 32px 13px 42px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.popup-chatgpt-link {
+.popup-chatgpt-button span {
     font-family: 'Roboto', 'Noto Sans JP', sans-serif;
     font-weight: 600;
-    font-size: 30px;
-    color: #0060F0;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 2px solid #0060F0;
-    padding-bottom: 1px;
-    transition: opacity 0.2s ease;
+    font-size: 20px;
+    color: black;
     white-space: nowrap;
 }
 
-.popup-chatgpt-link:hover {
-    opacity: 0.7;
-}
-
-.popup-chatgpt-link:active {
-    opacity: 0.5;
-}
-
-.popup-external-icon {
+.popup-chatgpt-button svg {
     flex-shrink: 0;
+    color: black;
+}
+
+.popup-chatgpt-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0px 0px black;
+}
+
+.popup-chatgpt-button:active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px 0px black;
 }
 
 .popup-sub-text {
     font-family: 'Roboto', 'Noto Sans JP', sans-serif;
     font-weight: 600;
     font-size: 14px;
-    color: black;
+    color: #6c6c6c;
     text-align: center;
     margin: 0;
-}
-
-.popup-progress-dots {
+    min-height: 1.5em;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-}
-
-.popup-dot {
-    opacity: 0.3;
-    transition: opacity 0.3s ease;
-}
-
-.popup-dot.active {
-    opacity: 1;
 }
 
 /* Responsive design */
@@ -1207,27 +1295,41 @@ body.loaded {
         font-size: 22px;
     }
 
-    .popup-screenshot-section {
-        width: 100%;
-        max-width: 340px;
-        height: 160px;
+    .popup-slide-hand {
+        width: 40px;
+        height: 40px;
     }
 
-    .popup-screenshot-img {
-        bottom: -8px;
+    .popup-click-svg {
+        width: 20px;
+        height: 17px;
     }
 
-    .popup-chatgpt-link {
-        font-size: 28px;
+    .popup-slide-badge {
+        font-size: 14px;
+        padding: 4px 16px;
     }
 
-    .popup-external-icon {
-        width: 22px;
-        height: 22px;
+    .popup-chatgpt-button {
+        height: 46px;
+        padding: 10px 24px 10px 32px;
+        gap: 16px;
+    }
+
+    .popup-chatgpt-button span {
+        font-size: 18px;
+    }
+
+    .popup-link-section {
+        padding: 0 20px;
     }
 
     .popup-card {
-        min-height: 320px;
+        min-height: auto;
         padding: 28px 1px;
+    }
+
+    .popup-phase-2 {
+        margin-top: -28px;
     }
 }
