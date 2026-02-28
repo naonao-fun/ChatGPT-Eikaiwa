@@ -86,6 +86,7 @@ function addTouchEffect(button) {
 function renderLearningSteps(container, steps) {
     container.innerHTML = "";
     steps.forEach((step, idx) => {
+        if (step.hidden) return;
         const button = document.createElement("button");
         button.className = "step-button";
         button.innerHTML = `
@@ -107,7 +108,7 @@ function renderLearningSteps(container, steps) {
                 copyToClipboard(text).catch(err => console.error('Copy failed:', err));
             }
 
-            showChatGPTPopup();
+            showChatGPTPopup(sceneId, stepNum);
         });
 
         addTouchEffect(button);
@@ -373,13 +374,19 @@ let popupPhaseTimeout = null;
 let popupDotInterval = null;
 
 // Show ChatGPT popup with 2-phase display
-function showChatGPTPopup() {
+function showChatGPTPopup(sceneId, stepNum) {
     const overlay = document.getElementById('popupOverlay');
     const phase1 = document.getElementById('popupPhase1');
     const phase2 = document.getElementById('popupPhase2');
     const cancelBtn = document.getElementById('popupCancel');
     const dots = document.querySelectorAll('.popup-dot');
     const video = overlay.querySelector('.popup-screenshot-img');
+    const sceneStepTag = document.getElementById('popupSceneStepTag');
+
+    // Update SCENE/STEP tag
+    if (sceneStepTag && sceneId && stepNum) {
+        sceneStepTag.textContent = `SCENE ${sceneId} - STEP ${stepNum}`;
+    }
 
     // Reset to phase 1
     phase1.classList.add('active');
