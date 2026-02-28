@@ -1166,13 +1166,12 @@ body.loaded {
     pointer-events: auto;
 }
 
-/* Phone screenshot image (cropped to show screen content) */
+/* Phone screenshot image (pre-cropped) */
 .popup-slide-img {
-    position: absolute;
-    width: 219%;
-    max-width: none;
-    top: -164%;
-    left: -60%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* Step instruction badge */

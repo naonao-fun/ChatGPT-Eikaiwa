@@ -5,7 +5,9 @@
       "mcp__figma-desktop__get_design_context",
       "mcp__figma-desktop__get_screenshot",
       "Bash(ls:*)",
-      "mcp__figma-desktop__get_metadata"
+      "mcp__figma-desktop__get_metadata",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/yugawanaoki/Desktop/ChatGPT-Eikaiwa/assets/images/guide-slide-*.png)",
+      "Bash(python3 -c \":*)"
     ]
   }
 }
