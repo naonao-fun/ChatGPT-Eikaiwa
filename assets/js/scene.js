@@ -199,10 +199,23 @@ function renderAudioSteps(container, sampleAudios) {
                     <div class="audio-timeline-track"></div>
                     <div class="audio-timeline-progress"></div>
                     <div class="audio-timeline-handle"></div>
+                    <div class="audio-ab-region" style="display: none;"></div>
+                    <div class="audio-ab-marker audio-ab-marker-a" style="display: none;"></div>
+                    <div class="audio-ab-marker audio-ab-marker-b" style="display: none;"></div>
                 </div>
                 <span class="audio-time-end">0:00</span>
             </div>
             <div class="audio-controls">
+                <div class="audio-ab-loop-group">
+                    <button class="audio-ab-button" aria-label="Set A-B loop" data-ab-state="idle">
+                        <span class="ab-button-text">A-B</span>
+                    </button>
+                    <button class="audio-ab-clear" aria-label="Clear A-B loop" style="display: none;">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
                 <button class="audio-rewind-button" aria-label="Rewind 10 seconds">
                     <img src="../../assets/images/rewind-10.svg" alt="" class="audio-rewind-icon">
                 </button>
@@ -211,6 +224,9 @@ function renderAudioSteps(container, sampleAudios) {
                 </button>
                 <button class="audio-forward-button" aria-label="Forward 10 seconds">
                     <img src="../../assets/images/forward-10.svg" alt="" class="audio-forward-icon">
+                </button>
+                <button class="audio-speed-button" aria-label="Playback speed">
+                    <span class="speed-button-text">1.0x</span>
                 </button>
             </div>
             <audio class="audio-element" preload="metadata">
@@ -243,6 +259,27 @@ function initializeAudioPlayers() {
         const timelineWrapper = card.querySelector('.audio-timeline-wrapper');
         const timelineProgress = card.querySelector('.audio-timeline-progress');
         const timelineHandle = card.querySelector('.audio-timeline-handle');
+
+        // A-B loop elements
+        const abButton = card.querySelector('.audio-ab-button');
+        const abButtonText = card.querySelector('.ab-button-text');
+        const abClearButton = card.querySelector('.audio-ab-clear');
+        const abRegion = card.querySelector('.audio-ab-region');
+        const abMarkerA = card.querySelector('.audio-ab-marker-a');
+        const abMarkerB = card.querySelector('.audio-ab-marker-b');
+
+        // Speed control elements
+        const speedButton = card.querySelector('.audio-speed-button');
+        const speedButtonText = card.querySelector('.speed-button-text');
+
+        // A-B loop state
+        let abPointA = null;
+        let abPointB = null;
+        let abLoopActive = false;
+
+        // Speed control state
+        const speedOptions = [0.8, 1.0, 1.2, 1.5, 2.0];
+        let currentSpeedIndex = 1;
 
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
@@ -350,19 +387,122 @@ function initializeAudioPlayers() {
 
         audio.addEventListener('loadedmetadata', updateTimeDisplay);
         audio.addEventListener('timeupdate', () => {
+            // A-B loop enforcement
+            if (abLoopActive && abPointA !== null && abPointB !== null) {
+                if (audio.currentTime >= abPointB) {
+                    audio.currentTime = abPointA;
+                }
+            }
             updateTimeDisplay();
             updateTimeline();
         });
         audio.addEventListener('ended', () => {
-            playIcon.src = '../../assets/images/play-large.svg';
-            audio.currentTime = 0;
-            updateTimeline();
+            if (abLoopActive && abPointA !== null) {
+                audio.currentTime = abPointA;
+                audio.play();
+            } else {
+                playIcon.src = '../../assets/images/play-large.svg';
+                audio.currentTime = 0;
+                updateTimeline();
+            }
         });
         audio.addEventListener('pause', () => {
             playIcon.src = '../../assets/images/play-large.svg';
         });
         audio.addEventListener('play', () => {
             playIcon.src = '../../assets/images/pause-large.svg';
+        });
+
+        // === A-B Loop helpers ===
+        function showAbMarkerA(timeA, duration) {
+            if (!duration) return;
+            const pct = (timeA / duration) * 100;
+            abMarkerA.style.left = `${pct}%`;
+            abMarkerA.style.display = 'block';
+        }
+
+        function showAbMarkerB(timeB, duration) {
+            if (!duration) return;
+            const pct = (timeB / duration) * 100;
+            abMarkerB.style.left = `${pct}%`;
+            abMarkerB.style.display = 'block';
+        }
+
+        function showAbRegion(timeA, timeB, duration) {
+            if (!duration) return;
+            const pctA = (timeA / duration) * 100;
+            const pctB = (timeB / duration) * 100;
+            abRegion.style.left = `${pctA}%`;
+            abRegion.style.width = `${pctB - pctA}%`;
+            abRegion.style.display = 'block';
+        }
+
+        function clearAbLoop() {
+            abPointA = null;
+            abPointB = null;
+            abLoopActive = false;
+            abButton.setAttribute('data-ab-state', 'idle');
+            abButtonText.textContent = 'A-B';
+            abClearButton.style.display = 'none';
+            abRegion.style.display = 'none';
+            abMarkerA.style.display = 'none';
+            abMarkerB.style.display = 'none';
+        }
+
+        // A-B button click handler
+        abButton.addEventListener('click', () => {
+            const currentState = abButton.getAttribute('data-ab-state');
+
+            if (currentState === 'idle') {
+                if (!audio.duration) return;
+                abPointA = audio.currentTime;
+                abButton.setAttribute('data-ab-state', 'a-set');
+                abButtonText.textContent = `A: ${formatTime(abPointA)}`;
+                abClearButton.style.display = 'flex';
+                showAbMarkerA(abPointA, audio.duration);
+            } else if (currentState === 'a-set') {
+                if (!audio.duration) return;
+                let bTime = audio.currentTime;
+                // Swap if B is before A
+                if (bTime < abPointA) {
+                    abPointB = abPointA;
+                    abPointA = bTime;
+                } else {
+                    abPointB = bTime;
+                }
+                // Minimum 1 second loop
+                if (abPointB - abPointA < 1) {
+                    abPointB = Math.min(abPointA + 1, audio.duration);
+                }
+                abLoopActive = true;
+                abButton.setAttribute('data-ab-state', 'active');
+                abButtonText.textContent = 'A-B';
+                showAbRegion(abPointA, abPointB, audio.duration);
+                showAbMarkerA(abPointA, audio.duration);
+                showAbMarkerB(abPointB, audio.duration);
+                audio.currentTime = abPointA;
+            } else if (currentState === 'active') {
+                clearAbLoop();
+            }
+        });
+
+        // A-B clear button
+        abClearButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            clearAbLoop();
+        });
+
+        // === Speed control ===
+        speedButton.addEventListener('click', () => {
+            currentSpeedIndex = (currentSpeedIndex + 1) % speedOptions.length;
+            const newSpeed = speedOptions[currentSpeedIndex];
+            audio.playbackRate = newSpeed;
+            speedButtonText.textContent = `${newSpeed}x`;
+            if (newSpeed !== 1.0) {
+                speedButton.classList.add('speed-active');
+            } else {
+                speedButton.classList.remove('speed-active');
+            }
         });
 
         updateTimeDisplay();

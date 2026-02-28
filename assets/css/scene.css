@@ -646,7 +646,7 @@ body.loaded {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 42px;
+    gap: 24px;
     width: 100%;
     overflow: visible;
     padding: 10px;
@@ -699,6 +699,133 @@ body.loaded {
 
 .audio-element {
     display: none;
+}
+
+/* A-B loop group */
+.audio-ab-loop-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* A-B loop button */
+.audio-ab-button {
+    background: white;
+    border: 2px solid black;
+    border-radius: 49px;
+    padding: 5px 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #686868;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.audio-ab-button:hover {
+    transform: scale(1.05);
+}
+
+.audio-ab-button:active {
+    transform: scale(0.95);
+}
+
+/* A point set - waiting for B */
+.audio-ab-button[data-ab-state="a-set"] {
+    border-color: #7fff00;
+    color: black;
+}
+
+/* A-B loop active */
+.audio-ab-button[data-ab-state="active"] {
+    background-color: #7fff00;
+    color: black;
+}
+
+/* Clear button for A-B */
+.audio-ab-clear {
+    background: transparent;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.audio-ab-clear:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+}
+
+.audio-ab-clear:active {
+    transform: scale(0.9);
+}
+
+/* A-B loop region overlay on timeline */
+.audio-ab-region {
+    position: absolute;
+    height: 4px;
+    background-color: rgba(127, 255, 0, 0.4);
+    border-radius: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* A and B point markers on timeline */
+.audio-ab-marker {
+    position: absolute;
+    width: 2px;
+    height: 12px;
+    background-color: #7fff00;
+    border-radius: 1px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Speed control button */
+.audio-speed-button {
+    background: white;
+    border: 2px solid black;
+    border-radius: 49px;
+    padding: 5px 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #686868;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    min-width: 56px;
+    text-align: center;
+}
+
+.audio-speed-button:hover {
+    transform: scale(1.05);
+}
+
+.audio-speed-button:active {
+    transform: scale(0.95);
+}
+
+/* Non-default speed active state */
+.audio-speed-button.speed-active {
+    background-color: #7fff00;
+    color: black;
 }
 
 /* Keyframe animations */
@@ -1357,5 +1484,20 @@ body.loaded {
 
     .popup-phase-2 {
         margin-top: -28px;
+    }
+
+    .audio-controls {
+        gap: 16px;
+    }
+
+    .audio-ab-button,
+    .audio-speed-button {
+        padding: 4px 12px;
+        font-size: 12px;
+    }
+
+    .audio-ab-clear {
+        width: 22px;
+        height: 22px;
     }
 }
