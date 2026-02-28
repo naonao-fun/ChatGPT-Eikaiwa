@@ -755,9 +755,10 @@ body.loaded {
     inset: 0;
     background-color: rgba(0, 0, 0, 0.65);
     z-index: 1000;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     padding: 33px;
+    padding-top: 18vh;
 }
 
 .popup-overlay.active {
@@ -786,6 +787,17 @@ body.loaded {
     opacity: 0;
     animation: popupSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
     transition: opacity 0.2s ease;
+}
+
+@keyframes closeButtonIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
 }
 
 .popup-close-button:hover {
@@ -1158,13 +1170,13 @@ body.loaded {
     border: 2px solid black;
     border-radius: 7px;
     box-shadow: 3px 3px 0px 0px black;
-    height: 50px;
+    height: 58px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 24px;
-    padding: 13px 32px 13px 42px;
+    padding: 15px 32px 15px 42px;
     cursor: pointer;
     text-decoration: none;
     transition: all 0.2s ease;
@@ -1175,7 +1187,7 @@ body.loaded {
 .popup-chatgpt-button span {
     font-family: 'Roboto', 'Noto Sans JP', sans-serif;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 23px;
     color: black;
     white-space: nowrap;
 }
@@ -1289,6 +1301,8 @@ body.loaded {
 
     .popup-overlay {
         padding: 20px 16px;
+        padding-top: 20px;
+        align-items: center;
     }
 
     .popup-copy-message {
@@ -1311,17 +1325,29 @@ body.loaded {
     }
 
     .popup-chatgpt-button {
-        height: 46px;
-        padding: 10px 24px 10px 32px;
+        height: 52px;
+        padding: 12px 24px 12px 32px;
         gap: 16px;
     }
 
     .popup-chatgpt-button span {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     .popup-link-section {
         padding: 0 20px;
+    }
+
+    .popup-container {
+        gap: 0;
+    }
+
+    .popup-close-button {
+        position: absolute;
+        bottom: -52px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: closeButtonIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
     }
 
     .popup-card {
