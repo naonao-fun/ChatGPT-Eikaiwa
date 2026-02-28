@@ -552,10 +552,15 @@ function showChatGPTPopup(sceneId, stepNum) {
     if (viewport) {
         let swStartX = 0;
         let swStartY = 0;
+        let swStartSlide = 0;
 
         viewport.addEventListener('touchstart', (e) => {
             swStartX = e.changedTouches[0].screenX;
             swStartY = e.changedTouches[0].screenY;
+            // Capture current slide at swipe start
+            swStartSlide = currentSlideIndex;
+            // Pause auto-play during swipe
+            stopSlideshow();
         }, { passive: true });
 
         viewport.addEventListener('touchend', (e) => {
@@ -566,18 +571,16 @@ function showChatGPTPopup(sceneId, stepNum) {
 
             // Only horizontal swipes (ignore vertical)
             if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-                // Stop auto-play BEFORE changing slide to prevent double advance
-                stopSlideshow();
-                if (dx < 0 && currentSlideIndex < 3) {
-                    goToSlide(currentSlideIndex + 1);
-                } else if (dx > 0 && currentSlideIndex > 0) {
-                    goToSlide(currentSlideIndex - 1);
+                if (dx < 0 && swStartSlide < 3) {
+                    goToSlide(swStartSlide + 1);
+                } else if (dx > 0 && swStartSlide > 0) {
+                    goToSlide(swStartSlide - 1);
                 }
-                // Restart auto-play timer
-                slideshowInterval = setInterval(() => {
-                    goToSlide(currentSlideIndex + 1);
-                }, 3500);
             }
+            // Restart auto-play timer
+            slideshowInterval = setInterval(() => {
+                goToSlide(currentSlideIndex + 1);
+            }, 3500);
         }, { passive: true });
     }
 }
