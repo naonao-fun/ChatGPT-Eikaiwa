@@ -1285,6 +1285,41 @@ body.loaded {
 .hand-pos-2 { bottom: 16%; right: 18%; }
 .hand-pos-3 { bottom: 16%; right: 18%; }
 
+/* Speak icon on slide 4 */
+.popup-slide-speak-icon {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    bottom: 10%;
+    right: 8%;
+    z-index: 3;
+}
+
+/* Sound wave animation - waves appear one by one from mouth outward */
+.speak-wave {
+    opacity: 0;
+}
+.speak-wave-1 {
+    animation: speakWave 2s ease-in-out infinite;
+    animation-delay: 0s;
+}
+.speak-wave-2 {
+    animation: speakWave 2s ease-in-out infinite;
+    animation-delay: 0.25s;
+}
+.speak-wave-3 {
+    animation: speakWave 2s ease-in-out infinite;
+    animation-delay: 0.5s;
+}
+
+@keyframes speakWave {
+    0% { opacity: 0; }
+    12% { opacity: 1; }
+    35% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
 /* Slide navigation dots */
 .popup-slide-dots {
     display: flex;
