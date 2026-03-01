@@ -60,6 +60,7 @@ body.loaded {
     height: 361px;
     position: relative;
     flex-shrink: 0;
+    overflow: visible;
     opacity: 0;
     transform: translateY(30px);
     animation: slideUp 1s ease-out 0.4s forwards;
@@ -71,6 +72,7 @@ body.loaded {
     object-fit: contain;
     object-position: 50% 50%;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+    animation: none;
 }
 
 /* Title section */
@@ -228,6 +230,15 @@ body.loaded {
     to {
         opacity: 1;
         transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
     }
 }
 
