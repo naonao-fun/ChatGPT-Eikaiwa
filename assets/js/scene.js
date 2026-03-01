@@ -92,7 +92,7 @@ function renderLearningSteps(container, steps) {
         button.innerHTML = `
             <span class="step-text">
                 <span class="step-number">${step.label || `STEP ${idx + 1}`} </span>
-                <span class="step-label">を開始する</span>
+                <span class="step-label">${step.buttonSuffix || 'を開始する'}</span>
             </span>
             <img src="../../assets/images/right-arrow.svg" alt="" class="step-arrow">
         `;
@@ -100,15 +100,21 @@ function renderLearningSteps(container, steps) {
         button.addEventListener("click", () => {
             const sceneId = getSceneId();
             const stepNum = idx + 1;
-            const promptUrl = `../../assets/prompts/SCENE${sceneId}-STEP${stepNum}.txt`;
 
-            // Load synchronously to keep user gesture context for clipboard access
-            const text = loadPromptTextSync(promptUrl);
-            if (text) {
-                copyToClipboard(text).catch(err => console.error('Copy failed:', err));
+            if (step.videoUrl) {
+                // Show video popup instead of prompt copy
+                showVideoPopup(step.videoUrl, sceneId, stepNum);
+            } else {
+                const promptUrl = `../../assets/prompts/SCENE${sceneId}-STEP${stepNum}.txt`;
+
+                // Load synchronously to keep user gesture context for clipboard access
+                const text = loadPromptTextSync(promptUrl);
+                if (text) {
+                    copyToClipboard(text).catch(err => console.error('Copy failed:', err));
+                }
+
+                showChatGPTPopup(sceneId, stepNum);
             }
-
-            showChatGPTPopup(sceneId, stepNum);
         });
 
         addTouchEffect(button);
@@ -596,6 +602,52 @@ function stopSlideshow() {
         clearInterval(slideshowInterval);
         slideshowInterval = null;
     }
+}
+
+// Show video popup (YouTube embed)
+function showVideoPopup(videoUrl, sceneId, stepNum) {
+    const overlay = document.getElementById('popupOverlay');
+    const phase1 = document.getElementById('popupPhase1');
+    const phase2 = document.getElementById('popupPhase2');
+    const phaseVideo = document.getElementById('popupPhaseVideo');
+    const videoIframe = document.getElementById('popupVideoIframe');
+    const cancelBtn = document.getElementById('popupCancel');
+    const sceneStepTag = document.getElementById('popupSceneStepTag');
+
+    // Update SCENE/STEP tag
+    if (sceneStepTag && sceneId && stepNum) {
+        sceneStepTag.textContent = `SCENE ${sceneId} - STEP ${stepNum}`;
+    }
+
+    // Hide other phases, show video phase
+    phase1.classList.remove('active');
+    phase2.classList.remove('active');
+    phaseVideo.classList.add('active');
+
+    // Set video URL
+    videoIframe.src = videoUrl;
+
+    // Show overlay
+    overlay.classList.add('active');
+
+    // Cancel/close handler
+    function handleCancel() {
+        // Stop video by clearing src
+        videoIframe.src = '';
+        phaseVideo.classList.remove('active');
+        overlay.classList.remove('active');
+        cancelBtn.removeEventListener('click', handleCancel);
+        overlay.removeEventListener('click', handleOverlayClick);
+    }
+
+    function handleOverlayClick(e) {
+        if (e.target === overlay) {
+            handleCancel();
+        }
+    }
+
+    cancelBtn.addEventListener('click', handleCancel);
+    overlay.addEventListener('click', handleOverlayClick);
 }
 
 // Show ChatGPT popup with 2-phase display
