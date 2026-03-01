@@ -102,16 +102,16 @@ function renderLearningSteps(container, steps) {
             const stepNum = idx + 1;
 
             if (step.linkToAudio) {
-                // Switch to audio tab and auto-play the corresponding audio
+                // Switch to audio tab and highlight the corresponding audio card
                 const switchTab = document.querySelector(`[data-tab="audio"]`);
                 if (switchTab) switchTab.click();
                 setTimeout(() => {
                     const audioCard = document.querySelector(`.audio-card[data-audio-step="${step.linkToAudio}"]`);
                     if (audioCard) {
-                        const playBtn = audioCard.querySelector('.audio-play-button');
-                        if (playBtn) playBtn.click();
+                        audioCard.classList.add('audio-card-highlight');
+                        setTimeout(() => audioCard.classList.remove('audio-card-highlight'), 1000);
                     }
-                }, 100);
+                }, 200);
             } else if (step.videoUrl) {
                 // Show video popup instead of prompt copy
                 showVideoPopup(step.videoUrl, sceneId, stepNum);
@@ -531,6 +531,7 @@ let popupPhaseTimeout = null;
 let slideshowInterval = null;
 let currentSlideIndex = 0;
 let subTextInterval = null;
+let slideBadgeShown = new Set();
 let subTextIndex = 0;
 
 // Sub-text rotation
@@ -596,6 +597,15 @@ function goToSlide(index) {
     dots.forEach((dot, i) => {
         dot.classList.toggle('active', i === currentSlideIndex);
     });
+
+    // Animate badge on first appearance of each slide
+    if (!slideBadgeShown.has(currentSlideIndex)) {
+        slideBadgeShown.add(currentSlideIndex);
+        const badge = slides[currentSlideIndex].querySelector('.popup-slide-badge');
+        if (badge) {
+            badge.classList.add('badge-animate');
+        }
+    }
 }
 
 // Slideshow: start auto-play
@@ -691,11 +701,8 @@ function showChatGPTPopup(sceneId, stepNum) {
         phase1.classList.remove('active');
         phase2.classList.add('active');
 
-        // Animate first slide badge
-        const firstBadge = document.querySelector('.popup-slide.active .popup-slide-badge');
-        if (firstBadge) {
-            firstBadge.classList.add('badge-animate');
-        }
+        // Reset badge tracking and start slideshow (goToSlide handles badge animation)
+        slideBadgeShown.clear();
 
         // Start slideshow
         startSlideshow();
@@ -712,7 +719,8 @@ function showChatGPTPopup(sceneId, stepNum) {
         }
         stopSlideshow();
         stopSubTextRotation();
-        // Reset badge animation
+        // Reset badge animation and tracking
+        slideBadgeShown.clear();
         document.querySelectorAll('.popup-slide-badge.badge-animate').forEach(b => b.classList.remove('badge-animate'));
         overlay.classList.remove('active');
         cancelBtn.removeEventListener('click', handleCancel);

@@ -539,6 +539,11 @@ body.loaded {
     animation: buttonSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
+.audio-card.audio-card-highlight {
+    background-color: #edffd6 !important;
+    box-shadow: 3px 3px 0px 0px black, 0 0 0 4px #7fff00 !important;
+}
+
 .audio-card:nth-child(1).animate-in {
     animation-delay: 0.6s;
 }
