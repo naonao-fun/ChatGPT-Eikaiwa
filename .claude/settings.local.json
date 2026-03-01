@@ -7,7 +7,10 @@
       "Bash(ls:*)",
       "mcp__figma-desktop__get_metadata",
       "Bash(sips -g pixelWidth -g pixelHeight /Users/yugawanaoki/Desktop/ChatGPT-Eikaiwa/assets/images/guide-slide-*.png)",
-      "Bash(python3 -c \":*)"
+      "Bash(python3 -c \":*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(done)",
+      "Bash(git checkout -- index.html assets/css/styles.css assets/js/script.js)"
     ]
   }
 }
