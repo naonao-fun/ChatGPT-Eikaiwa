@@ -534,36 +534,42 @@ let subTextInterval = null;
 let slideBadgeShown = new Set();
 let subTextIndex = 0;
 
-// Sub-text rotation
-const subTextMessages = [
+// Sub-text rotation: ①固定 → ②固定 → ③ランダム英語 → ループ
+const subTextFixed = [
     'さあ、学習を始めましょう！',
     '使用するAIアプリに移動してください',
+];
+const subTextEnglish = [
     'Progress, not perfection.',
     'Keep going.',
     'Mistakes are proof you\'re trying.',
     'Rome wasn\'t built in a day.',
 ];
+let lastEnglishMsg = '';
 
 function startSubTextRotation() {
     stopSubTextRotation();
     subTextIndex = 0;
+    lastEnglishMsg = '';
     const el = document.querySelector('.popup-sub-text');
     if (!el) return;
-    el.textContent = subTextMessages[0];
+    el.textContent = subTextFixed[0];
     el.style.opacity = '1';
 
     subTextInterval = setInterval(() => {
         subTextIndex++;
+        const phase = subTextIndex % 3; // 0=①, 1=②, 2=③
         let nextMsg;
-        if (subTextIndex === 1) {
-            // 2nd message is always the second fixed one
-            nextMsg = subTextMessages[1];
+        if (phase === 0) {
+            nextMsg = subTextFixed[0];
+        } else if (phase === 1) {
+            nextMsg = subTextFixed[1];
         } else {
-            // 3rd onwards: pick randomly, avoiding consecutive duplicates
-            const currentMsg = el.textContent;
+            // ③ランダム英語（前回と重複しない）
             do {
-                nextMsg = subTextMessages[Math.floor(Math.random() * subTextMessages.length)];
-            } while (nextMsg === currentMsg);
+                nextMsg = subTextEnglish[Math.floor(Math.random() * subTextEnglish.length)];
+            } while (nextMsg === lastEnglishMsg);
+            lastEnglishMsg = nextMsg;
         }
         // Fade out, swap text, fade in
         el.style.transition = 'opacity 0.4s ease';
@@ -750,11 +756,8 @@ function showChatGPTPopup(sceneId, stepNum) {
         dot.addEventListener('click', () => {
             const dotIndex = parseInt(dot.getAttribute('data-dot'), 10);
             goToSlide(dotIndex);
-            // Reset auto-play timer
+            // Stop auto-play permanently on manual interaction
             stopSlideshow();
-            slideshowInterval = setInterval(() => {
-                goToSlide(currentSlideIndex + 1);
-            }, 3500);
         });
     });
 
@@ -788,10 +791,7 @@ function showChatGPTPopup(sceneId, stepNum) {
                     goToSlide(swStartSlide - 1);
                 }
             }
-            // Restart auto-play timer
-            slideshowInterval = setInterval(() => {
-                goToSlide(currentSlideIndex + 1);
-            }, 3500);
+            // Auto-play stays stopped after manual interaction
         }, { passive: true });
     }
 }
