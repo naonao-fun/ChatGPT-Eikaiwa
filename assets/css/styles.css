@@ -250,7 +250,7 @@ body.loaded {
 
     .home-layout {
         padding: 30px 20px;
-        gap: 25px;
+        gap: 10px;
         flex-direction: column;
     }
 
