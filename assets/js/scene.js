@@ -101,7 +101,18 @@ function renderLearningSteps(container, steps) {
             const sceneId = getSceneId();
             const stepNum = idx + 1;
 
-            if (step.videoUrl) {
+            if (step.linkToAudio) {
+                // Switch to audio tab and auto-play the corresponding audio
+                const switchTab = document.querySelector(`[data-tab="audio"]`);
+                if (switchTab) switchTab.click();
+                setTimeout(() => {
+                    const audioCard = document.querySelector(`.audio-card[data-audio-step="${step.linkToAudio}"]`);
+                    if (audioCard) {
+                        const playBtn = audioCard.querySelector('.audio-play-button');
+                        if (playBtn) playBtn.click();
+                    }
+                }, 100);
+            } else if (step.videoUrl) {
                 // Show video popup instead of prompt copy
                 showVideoPopup(step.videoUrl, sceneId, stepNum);
             } else {
