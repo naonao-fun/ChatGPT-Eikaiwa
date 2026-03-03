@@ -166,6 +166,13 @@ body.loaded {
 .download-card:nth-child(7).animate-in { animation-delay: 0.8s; }
 .download-card:nth-child(8).animate-in { animation-delay: 0.85s; }
 
+/* File type icon */
+.file-type-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+}
+
 /* Download data */
 .download-data {
     display: flex;
@@ -448,6 +455,11 @@ body.loaded {
 
     .download-title {
         font-size: 16px;
+    }
+
+    .file-type-icon {
+        width: 30px;
+        height: 30px;
     }
 
     .download-button {

@@ -14,7 +14,8 @@
       "Bash(__NEW_LINE_1de1a5a42ecef271__ cat)",
       "Bash(/tmp/analyze_svg2.sh:*)",
       "Bash(chmod +x /tmp/analyze_svg2.sh)",
-      "Bash(/tmp/analyze_svg2.sh)"
+      "Bash(/tmp/analyze_svg2.sh)",
+      "WebFetch(domain:www.figma.com)"
     ]
   }
 }
