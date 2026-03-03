@@ -50,6 +50,22 @@ document.addEventListener('DOMContentLoaded', () => {
         contentsList.appendChild(card);
     });
 
+    // Search bar functionality
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+
+    searchInput.addEventListener('input', function() {
+        searchClear.classList.toggle('visible', this.value.length > 0);
+        filterScenes();
+    });
+
+    searchClear.addEventListener('click', function() {
+        searchInput.value = '';
+        searchClear.classList.remove('visible');
+        filterScenes();
+        searchInput.focus();
+    });
+
     // Filter button functionality
     const filterButtons = document.querySelectorAll('.filter-btn');
 
@@ -69,9 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Filter scenes based on active filters
+    // Filter scenes based on active filters and search text
     function filterScenes() {
         const sceneCards = document.querySelectorAll('.scene-card');
+        const searchText = searchInput.value.trim().toLowerCase();
 
         // Get active category filters (ジャンル)
         const activeCategories = Array.from(document.querySelectorAll('.filter-btn.active'))
@@ -86,12 +103,23 @@ document.addEventListener('DOMContentLoaded', () => {
         sceneCards.forEach(card => {
             const categoryTag = card.querySelector('.category-tag')?.textContent.trim();
             const levelTag = card.querySelector('.level-tag')?.textContent.trim();
+            const sceneNumber = card.querySelector('.scene-number')?.textContent.trim().toLowerCase() || '';
+            const sceneLocation = card.querySelector('.scene-location')?.textContent.trim().toLowerCase() || '';
+            const sceneTitle = card.querySelector('.scene-title')?.textContent.trim().toLowerCase() || '';
 
             // Check if card matches filters (AND condition)
             let showCard = true;
 
+            // Search text filter
+            if (searchText && showCard) {
+                showCard = sceneNumber.includes(searchText)
+                    || sceneLocation.includes(searchText)
+                    || sceneTitle.includes(searchText)
+                    || (categoryTag && categoryTag.toLowerCase().includes(searchText));
+            }
+
             // If category filters are active, card must match one of them
-            if (activeCategories.length > 0) {
+            if (activeCategories.length > 0 && showCard) {
                 showCard = activeCategories.includes(categoryTag);
             }
 
