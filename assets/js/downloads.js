@@ -15,11 +15,75 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trigger animations on page load
     setTimeout(triggerCardAnimations, 100);
 
-    // Download card click effects (ripple only, don't prevent default)
+    // Prompt zip download handler
+    async function handlePromptDownload(card) {
+        const sceneStart = parseInt(card.dataset.sceneStart, 10);
+        const sceneEnd = parseInt(card.dataset.sceneEnd, 10);
+        const zipName = card.dataset.zipName;
+        const steps = [1, 2, 3];
+
+        // Show loading state
+        const button = card.querySelector('.download-button');
+        const originalHTML = button.innerHTML;
+        button.innerHTML = '<span class="download-spinner"></span>';
+        card.style.pointerEvents = 'none';
+
+        try {
+            const zip = new JSZip();
+            const fetchPromises = [];
+
+            for (let scene = sceneStart; scene <= sceneEnd; scene++) {
+                const sceneNum = String(scene).padStart(3, '0');
+                for (const step of steps) {
+                    const fileName = `SCENE${sceneNum}-STEP${step}.txt`;
+                    const filePath = `../assets/prompts/${fileName}`;
+                    fetchPromises.push(
+                        fetch(filePath)
+                            .then(res => {
+                                if (!res.ok) return null;
+                                return res.text().then(text => ({ fileName, text }));
+                            })
+                            .catch(() => null)
+                    );
+                }
+            }
+
+            const results = await Promise.all(fetchPromises);
+            results.forEach(result => {
+                if (result) {
+                    zip.file(result.fileName, result.text);
+                }
+            });
+
+            const blob = await zip.generateAsync({ type: 'blob' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = zipName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error('Download failed:', err);
+            alert('ダウンロードに失敗しました。もう一度お試しください。');
+        } finally {
+            button.innerHTML = originalHTML;
+            card.style.pointerEvents = '';
+        }
+    }
+
+    // Download card click effects
     const downloadCards = document.querySelectorAll('.download-card');
 
     downloadCards.forEach(card => {
         card.addEventListener('click', function(e) {
+            // Handle prompt zip downloads locally
+            if (this.hasAttribute('data-prompt-download')) {
+                e.preventDefault();
+                handlePromptDownload(this);
+            }
+
             // Create light ripple effect
             const light = document.createElement('span');
             const rect = this.getBoundingClientRect();
@@ -92,6 +156,18 @@ style.textContent = `
             transform: translate(-50%, -50%) scale(4);
             opacity: 0;
         }
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    .download-spinner {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(0, 0, 0, 0.2);
+        border-top-color: #000;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
     }
 `;
 document.head.appendChild(style);
