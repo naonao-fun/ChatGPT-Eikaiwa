@@ -198,6 +198,14 @@ body.loaded {
     line-height: 1.09;
 }
 
+/* Guide icon */
+.guide-icon {
+    width: 48px;
+    height: 48px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
 /* Guide description */
 .guide-description {
     font-family: 'Roboto', 'Noto Sans JP', sans-serif;
