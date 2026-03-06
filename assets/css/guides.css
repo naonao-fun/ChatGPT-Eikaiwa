@@ -178,7 +178,9 @@ body.loaded {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    width: 222px;
+    width: auto;
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
 }
 
