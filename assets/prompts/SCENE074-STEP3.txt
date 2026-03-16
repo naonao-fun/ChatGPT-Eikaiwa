@@ -42,7 +42,7 @@
 ==================================================
 流れ：
 
-1）AIが英語で最終報告を行う（やや具体的に）。
+1）AIが英語で学習者（進行役）に会議が終りです、といいます。
 2）最後に必ず：
    EN: Could you close the meeting for us?
 3）学習者が［進行メモ］を参考に会議を締める。
@@ -83,10 +83,8 @@ JP: よく聞いてから、会議を締めてください。
 EN: We will discuss briefly before finishing. I will give feedback after the full discussion.
 JP: すぐには終わらず、少しやり取りをしてからフィードバックします。
 
-5) AI最終報告（英語で、やや具体的に）：
-- Summarize the pilot in Asia and Europe
-- Mention collecting feedback from heavy users
-- Confirm purpose of next meeting
+5) AIが会議の終わりを伝えます（英語でいいます）：
+- It's time to close the meeting.
 
 最後に必ず：
 EN: Could you close the meeting for us?

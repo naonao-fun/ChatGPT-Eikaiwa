@@ -45,7 +45,7 @@ immediately self-correct and re-pronounce the phrase in native English.
 ==================================================
 1. Staff: Hello. Can I help you?
 2. Customer: Yes, do you have this in a smaller size?
-3. Staff: Sure. This is tight-fitting, but it's very stretchy.
+3. Staff: Sure. Here you go. This is tight-fitting, but it's very stretchy.
 4. Customer: Oh, nice fabric. Would it go well with jeans?
 5. Staff: Yes, it's easy to coordinate with as well.
 6. Customer: Great. Can I try it on?
@@ -62,7 +62,7 @@ immediately self-correct and re-pronounce the phrase in native English.
 - help /help/：語尾の /p/ を止める。
 - 質問はやや上昇調。
 
-3. Sure. This is tight-fitting, but it's very stretchy.
+3. Sure. Here you go. This is tight-fitting, but it's very stretchy.
 - tight-fitting：tight の /t/、fitting の最初にアクセント。
 - it's /ɪts/：語尾の /ts/。
 - very /ˈveri/：最初にアクセント。

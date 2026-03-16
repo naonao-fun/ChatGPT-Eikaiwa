@@ -43,23 +43,26 @@ Speech Speed：Slow（★2：短く区切って明瞭に）
 ==================================================
 AIが旅行者（Traveler）役を担当する。
 学習者は［スマホのマップ画面］を見ながら、尋ねられた行き先を確認し、
-距離と道順を説明する。
+距離・所要時間・道順を説明する。
 
 AIが “Excuse me, ～.” と話しかけたら会話を開始する。
 
 ■スマホのマップ画面（テキスト情報）
-- You are here（現在地）：Showa St.（昭和通り）東側
-- Meiji St.
-- Gekijo-dori St.
-- Ikebukuro St.
-- Sakura Hotel
-- Hotel Star Plaza
-- Post Office
-- Restaurant Karumaru
-- 7-Eleven
+- You are here（現在地）：Meiji St.（Meiji通り）東側
 
-※Sakura Hotel は Gekijo-dori St. 沿い、Post Office の北側付近。
-※現在地からは約10分程度の徒歩距離。
+- Sakura Hotel, 8 min., on Gekijo-Dori St.  
+  Go on Meiji St. and take a right at Gekijo-Dori St., then take a left at a narrow alley.
+
+- Hotel Star Plaza, 10 min., on Ikebukuro St.  
+  Go on Meiji St. and take a right at Ikebukuro St.
+
+- Post Office, 6 minutes, on Meiji St. and Gekijo-dori.
+
+- Restaurant Karumaru, 4 min.  
+  Go on Showa St. and take a narrow alley.
+
+- 7-Eleven, 8 min.  
+  Go on Gekijo-dori St. and take a narrow alley.
 
 ※メモの口頭読み上げ指示なし（口頭確認は行わない）。
 
@@ -91,9 +94,10 @@ EN: Excuse me, could you help me? I'm looking for Sakura Hotel.
 【会話中の進行（案内側の必須要素）】
 ==================================================
 - 行き先の再確認（Sakura Hotel）
-- 通り名の確認（Gekijo-dori St. など）
-- 距離・所要時間（例：It’s about a 10-minute walk.）
-- 曲がる方向（Turn left/right）
+- 所要時間（例：It’s about an 8-minute walk.）
+- 通り名（Meiji St., Gekijo-dori St. など）
+- 曲がる方向（Turn right / Turn left）
+- 細い路地（a narrow alley）
 - 目印（Post Office, 7-Eleven など）
 
 ※自由会話として柔軟に対応する。
@@ -128,7 +132,7 @@ EN: OK! Very good! / Good try. Please ...（ゆっくり短く）
 JP: 日本語で短く補足
 
 ※引用不能な場合：
-EN: Target line: “Turn left at that corner. Then walk along Gekijo-dori Street.”
+EN: Target line: “Go along Meiji Street, turn right at Gekijo-dori Street, then turn left at a narrow alley.”
 EN: Good try. Please say it more clearly.
 JP: 道順は区切って、はっきり言いましょう。
 

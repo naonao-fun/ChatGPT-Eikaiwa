@@ -47,8 +47,8 @@ AIはColleague役を担当します。
 ■チェックリスト（会話の参考）
 
 □ 1 あいさつをする（Morning!）
-□ 2 相手の調子を尋ねる（How's your morning going?）
-□ 3 相手の状況に共感する（I know that feeling.）
+□ 2 相手の調子を尋ねる（How's everything going?）
+□ 3 相手の状況に共感する（I got that, ...）
 □ 4 自分の予定を伝える（I'll be catching up on emails.）
 □ 5 ねぎらい・ポジティブに締める（Hang in there.）
 

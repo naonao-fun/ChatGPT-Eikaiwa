@@ -49,7 +49,7 @@ immediately self-correct and re-pronounce the phrase in native English.
 4. You: Sounds good! What time?
 5. Friend: How about meeting at the theater at 6:30?
 6. You: Perfect. Should I book the tickets online?
-7. Friend: , thanks. I’ll pay you back later.
+7. Friend: Sure, thanks. I’ll pay you back later.
 8. You: Great. See you then!
 9. Friend: See you!
 
