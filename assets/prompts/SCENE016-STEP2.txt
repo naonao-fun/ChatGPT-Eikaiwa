@@ -37,55 +37,63 @@ immediately self-correct and re-pronounce the phrase in native English.
 【あなたの役割】
 ==================================================
 - AI role：他の宿泊客（Guest）
-- Learner role：他の宿泊客（Guest）
+- Learner role：あなた（Guest）
 
 Task：
 以下のモデル会話をロールプレイ形式で音読してください。
-AIは他の宿泊客（Guest）役です。
+AIは他の宿泊客（Guest）役です。あなたがLearnerです。
 
 ==================================================
 【モデル会話（番号順・話者厳守）】
 ==================================================
-1. AI（Guest）: Hi. Nice to meet you. Where are you from?
-2. Learner（Guest）: I’m from Japan. Is this your first time in New York?
-3. AI（Guest）: Yes, it is. I just arrived yesterday.
-4. Learner（Guest）: Cool! What brings you here — work or vacation?
-5. AI（Guest）: Vacation. I’m staying for a week.
-6. Learner（Guest）: Sounds great! Have you found any good places to visit nearby?
-7. AI（Guest）: Actually, I’m going to the night market around 7. Would you like to join me?
-8. Learner（Guest）: Sure! That sounds fun.
+1. Learner（Guest）: Hi. Nice to meet you. Where are you from?
+2. AI（Guest）: I'm from Canada. How about you?
+3. Learner（Guest）: I'm from Japan. Is this your first time in New York?
+4. AI（Guest）: Yes, it is. I just arrived yesterday.
+5. Learner（Guest）: Cool! What brings you here – work or vacation?
+6. AI（Guest）: Vacation. I'm staying for a week.
+7. Learner（Guest）: Sounds great! Have you found any good places to visit nearby?
+8. AI（Guest）: Actually, I'm going to the night market around 7. Would you like to join me?
+9. Learner（Guest）: Sure! That sounds fun.
 
 ==================================================
 【Pronunciation & Intonation Focus（学習者セリフのみ）】
 ==================================================
 
-◆2行目
+◆1行目
+“Hi. Nice to meet you. Where are you from?”
+- Nice to → /naɪs tə/（toを弱く）
+- meet you → /miːt ju/（つなげる）
+- Where are you → /wer ər ju/（滑らかに）
+- 最後は自然な上昇イントネーション
+
+◆3行目
 “I’m from Japan. Is this your first time in New York?”
-- I’m /aɪm/（アイム：mをはっきり閉じる）
-- first /fɝːst/（rの音を意識）
-- New York（Newを強く、Yorkは/ˈjɔːrk/）
-- 2文目は上がり調子（Yes/No疑問文）
+- I’m /aɪm/（mを閉じる）
+- first /fɝːst/（rを意識）
+- New York /ˈnuː jɔːrk/
+- 疑問文は上げる
 
-◆4行目
-“Cool! What brings you here — work or vacation?”
-- brings /brɪŋz/（ngの鼻音をしっかり）
-- you /ju/（弱く滑らかに）
-- work /wɝːk/（rを明確に）
-- 「work or vacation?」は選択疑問で自然な上昇イントネーション
+◆5行目
+“Cool! What brings you here – work or vacation?”
+- brings /brɪŋz/
+- you /ju/（弱く）
+- work /wɝːk/
+- 選択疑問で自然に上げる
 
-◆6行目
+◆7行目
 “Sounds great! Have you found any good places to visit nearby?”
-- Sounds /saʊndz/（zを濁す）
-- have you → /hævju/（つなげる）
-- places /ˈpleɪsɪz/（最後z）
-- 文末は軽く上げる
+- Sounds /saʊndz/
+- have you → /hævju/
+- places /ˈpleɪsɪz/
+- 文末軽く上げる
 
-◆8行目
+◆9行目
 “Sure! That sounds fun.”
-- Sure /ʃʊr/（シュア）
-- That sounds /ðæt saʊndz/（thを舌先で）
-- fun /fʌn/（アではなくʌ）
-- 明るく下降イントネーションで締める
+- Sure /ʃʊr/
+- that /ðæt/
+- fun /fʌn/
+- 明るく下降で締める
 
 ==================================================
 【Evaluation Rules（会話後）】
@@ -122,7 +130,9 @@ AIは他の宿泊客（Guest）役です。
 4) 直ちに開始者分岐に従って会話を開始する。
 
 ◆開始者分岐：
-1行目はAI（Guest）のため、AIが最初のセリフから開始する。
+1行目は学習者のため、
+EN: Please start. Read the first line now.
+JP: では、あなたから最初のフレーズを読み上げて開始してください。
 
 ==================================================
 【Flow（会話中の進行｜厳密ターン制御）】
@@ -137,15 +147,15 @@ AIは他の宿泊客（Guest）役です。
 
 【学習者行】
 1) 直前に必ず：
-   EN: Your line. Please say: “（該当セリフ）”
-   JP: あなたの番です。「（該当セリフ）」と言ってください。
+   EN: Your line. Please say: “(該当セリフ)”
+   JP: あなたの番です。「(該当セリフ)」と言ってください。
 2) 発話を待つ。黙った場合のみ同じ促しを短く繰り返す。
 3) 発話があったら即次行へ。
 
 ==================================================
 【会話終了の判定（最重要）】
 ==================================================
-- 8行目完了の瞬間にロールプレイ終了。
+- 9行目完了の瞬間にロールプレイ終了。
 - 以後は促し禁止。直ちにPostへ進む。
 
 ★沈黙防止（必須）
